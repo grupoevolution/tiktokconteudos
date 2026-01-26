@@ -763,7 +763,7 @@
             
             loadProducts();
         }
-      async function generateDistribution() {
+    async function generateDistribution() {
             const weekStart = document.getElementById('weekStart').value;
             const mode = document.getElementById('distributionMode').value;
             
@@ -779,8 +779,13 @@
             });
             
             const data = await response.json();
-            currentDistributionId = data.distribution_id;
             
+            if (!data.success) {
+                alert(data.message || 'Erro ao gerar distribuição');
+                return;
+            }
+            
+            currentDistributionId = data.distribution_id;
             displayDistribution(data.distribution);
         }
         
@@ -820,13 +825,16 @@
         async function publishDistribution() {
             if (!currentDistributionId) return;
             
+            if (!confirm('Publicar esta distribuição? Os funcionários verão os produtos.')) return;
+            
             await fetch(`${API_URL}/distribution/publish/${currentDistributionId}`, {
                 method: 'POST',
                 headers
             });
             
-            alert('Distribuição publicada!');
+            alert('Distribuição publicada com sucesso!');
             document.getElementById('distributionPreview').style.display = 'none';
+            document.getElementById('weekStart').value = '';
         }
         
         async function loadTeam() {
@@ -844,6 +852,8 @@
         }
         
         function showAddMemberModal() {
+            document.getElementById('memberName').value = '';
+            document.getElementById('memberProducts').value = '9';
             document.getElementById('addMemberModal').classList.add('show');
         }
         
@@ -864,17 +874,21 @@
             
             closeModal('addMemberModal');
             loadTeam();
+            alert(`Membro ${name} adicionado! Acesse: ${window.location.origin}/${name}`);
         }
         
         async function deleteMember(id) {
             if (!confirm('Remover membro?')) return;
             
-            await fetch(`${API_URL}/team/${id}`, {
-                method: 'DELETE',
-                headers
-            });
-            
-            loadTeam();
+            try {
+                await fetch(`${API_URL}/team/${id}`, {
+                    method: 'DELETE',
+                    headers
+                });
+                loadTeam();
+            } catch (error) {
+                alert('Erro ao remover. Membro pode ter distribuições associadas.');
+            }
         }
         
         function closeModal(id) {
@@ -887,8 +901,51 @@
             return `${days[date.getDay()]} - ${date.getDate()}/${date.getMonth() + 1}`;
         }
         
-        // Carregar dashboard ao iniciar
-        loadDashboard();
+        // Adicionar CSS para animação de loading
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes spin {
+                to { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Verificar autenticação e carregar dashboard
+        async function checkAuth() {
+            try {
+                const response = await fetch(`${API_URL}/auth/verify`, { headers });
+                const data = await response.json();
+                
+                if (!data.success) {
+                    localStorage.clear();
+                    window.location.href = '/';
+                    return false;
+                }
+                return true;
+            } catch (error) {
+                console.error('Erro na autenticação:', error);
+                localStorage.clear();
+                window.location.href = '/';
+                return false;
+            }
+        }
+        
+        async function init() {
+            console.log('Iniciando painel admin...');
+            
+            const isAuth = await checkAuth();
+            if (!isAuth) return;
+            
+            console.log('Carregando dashboard...');
+            await loadDashboard();
+        }
+        
+        // Iniciar
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
     </script>
 </body>
 </html>
