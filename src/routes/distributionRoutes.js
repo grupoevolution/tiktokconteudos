@@ -7,7 +7,7 @@ const router = express.Router();
 // Função auxiliar para obter datas da semana
 function getWeekDates(startDate) {
   const dates = [];
-  const start = new Date(startDate);
+  const start = new Date(startDate + 'T00:00:00');
   
   for (let i = 0; i < 5; i++) {
     const date = new Date(start);
@@ -37,18 +37,41 @@ function distributeProducts(members, weekDates, distributionMode = 'different') 
     });
   });
 
-  // Buscar produtos por categoria
-  const campeoes = db.prepare('SELECT * FROM products WHERE category = "campeoes" AND status = "active"').all();
-  const roupas = db.prepare('SELECT * FROM products WHERE category = "roupas" AND status = "active"').all();
-  const novos = db.prepare('SELECT * FROM products WHERE category = "novos" AND status = "active"').all();
+  // Buscar produtos por categoria com tratamento de erro
+  let campeoes = [];
+  let roupas = [];
+  let novos = [];
+  
+  try {
+    campeoes = db.prepare(`SELECT * FROM products WHERE category = ? AND status = ?`).all('campeoes', 'active');
+    roupas = db.prepare(`SELECT * FROM products WHERE category = ? AND status = ?`).all('roupas', 'active');
+    novos = db.prepare(`SELECT * FROM products WHERE category = ? AND status = ?`).all('novos', 'active');
+  } catch (error) {
+    console.error('Erro ao buscar produtos:', error);
+    throw new Error('Erro ao buscar produtos do banco de dados');
+  }
+
+  console.log('Produtos encontrados:', {
+    campeoes: campeoes.length,
+    roupas: roupas.length,
+    novos: novos.length
+  });
+
+  // Verificar se há produtos suficientes
+  if (campeoes.length === 0 && roupas.length === 0 && novos.length === 0) {
+    throw new Error('Nenhum produto encontrado. Adicione produtos antes de gerar a distribuição.');
+  }
 
   // Função para selecionar produtos respeitando regra de 3 dias
   function selectProducts(products, count, usedInLast3Days) {
+    if (products.length === 0) {
+      return [];
+    }
+    
     const available = products.filter(p => !usedInLast3Days.includes(p.id));
     const selected = [];
     
-    // Se não houver produtos suficientes disponíveis, usar todos disponíveis primeiro
-    const toSelect = available.length >= count ? count : available.length;
+    const toSelect = Math.min(available.length, count);
     
     for (let i = 0; i < toSelect; i++) {
       const randomIndex = Math.floor(Math.random() * available.length);
@@ -56,7 +79,7 @@ function distributeProducts(members, weekDates, distributionMode = 'different') 
     }
     
     // Se ainda precisar de mais produtos, usar os que foram usados
-    if (selected.length < count) {
+    if (selected.length < count && products.length > 0) {
       const remaining = count - selected.length;
       const usedProducts = products.filter(p => usedInLast3Days.includes(p.id));
       
@@ -72,7 +95,6 @@ function distributeProducts(members, weekDates, distributionMode = 'different') 
   const usedProductsTracker = {};
   
   weekDates.forEach((date, dayIndex) => {
-    // Produtos usados nos últimos 3 dias (excluindo hoje)
     const last3DaysProducts = {
       campeoes: [],
       roupas: [],
@@ -96,16 +118,16 @@ function distributeProducts(members, weekDates, distributionMode = 'different') 
       novos: []
     };
     
-    members.forEach(member => {
+    members.forEach((member, memberIndex) => {
       const productsPerCategory = Math.floor(member.products_per_day / 3);
       
       if (distributionMode === 'same') {
         // Modo IGUAL - todos recebem os mesmos produtos
-        if (members[0].id === member.id) {
+        if (memberIndex === 0) {
           // Primeiro membro define os produtos
-          const selectedCampeoes = selectProducts(campeoes, productsPerCategory, last3DaysProducts.campeoes);
-          const selectedRoupas = selectProducts(roupas, productsPerCategory, last3DaysProducts.roupas);
-          const selectedNovos = selectProducts(novos, productsPerCategory, last3DaysProducts.novos);
+          const selectedCampeoes = selectProducts([...campeoes], productsPerCategory, last3DaysProducts.campeoes);
+          const selectedRoupas = selectProducts([...roupas], productsPerCategory, last3DaysProducts.roupas);
+          const selectedNovos = selectProducts([...novos], productsPerCategory, last3DaysProducts.novos);
           
           distribution[date][member.id].products.campeoes = selectedCampeoes;
           distribution[date][member.id].products.roupas = selectedRoupas;
@@ -125,9 +147,9 @@ function distributeProducts(members, weekDates, distributionMode = 'different') 
         }
       } else {
         // Modo DIFERENTE - cada um recebe produtos diferentes
-        const selectedCampeoes = selectProducts(campeoes, productsPerCategory, last3DaysProducts.campeoes);
-        const selectedRoupas = selectProducts(roupas, productsPerCategory, last3DaysProducts.roupas);
-        const selectedNovos = selectProducts(novos, productsPerCategory, last3DaysProducts.novos);
+        const selectedCampeoes = selectProducts([...campeoes], productsPerCategory, last3DaysProducts.campeoes);
+        const selectedRoupas = selectProducts([...roupas], productsPerCategory, last3DaysProducts.roupas);
+        const selectedNovos = selectProducts([...novos], productsPerCategory, last3DaysProducts.novos);
         
         distribution[date][member.id].products.campeoes = selectedCampeoes;
         distribution[date][member.id].products.roupas = selectedRoupas;
@@ -177,7 +199,10 @@ router.post('/generate', authMiddleware, (req, res) => {
     });
   } catch (error) {
     console.error('Erro ao gerar distribuição:', error);
-    res.status(500).json({ error: 'Erro ao gerar distribuição' });
+    res.status(500).json({ 
+      error: 'Erro ao gerar distribuição',
+      message: error.message 
+    });
   }
 });
 
