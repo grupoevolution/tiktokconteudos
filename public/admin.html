@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Admin - TikTok Shop</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+            color: #FFF;
+            overflow-x: hidden;
+        }
+        
+        .header {
+            background: #0a0a0a;
+            border-bottom: 1px solid #1a1a1a;
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .btn-logout {
+            background: #1a1a1a;
+            color: #888;
+            border: 1px solid #2a2a2a;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .btn-logout:hover {
+            border-color: #FF0050;
+            color: #FF0050;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .tabs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-bottom: 40px;
+            background: #0a0a0a;
+            padding: 10px;
+            border-radius: 15px;
+        }
+        
+        .tab {
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 10px;
+            color: #888;
+            font-weight: 600;
+        }
+        
+        .tab.active {
+            background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
+            color: #000;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .stat-card {
+            background: #0a0a0a;
+            border: 1px solid #1a1a1a;
+            border-radius: 15px;
+            padding: 25px;
+        }
+        
+        .stat-label {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .section {
+            background: #0a0a0a;
+            border: 1px solid #1a1a1a;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
+            color: #000;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .btn-secondary {
+            background: #1a1a1a;
+            color: #FFF;
+            border: 1px solid #2a2a2a;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .upload-zone {
+            border: 2px dashed #2a2a2a;
+            border-radius: 15px;
+            padding: 60px 30px;
+            text-align: center;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        
+        .upload-zone:hover {
+            border-color: #00F2EA;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            background: #000;
+            border: 2px solid #1a1a1a;
+            color: #FFF;
+            padding: 12px 15px;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+        
+        .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .product-card {
+            background: #000;
+            border: 1px solid #1a1a1a;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .product-card:hover {
+            border-color: #00F2EA;
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: #1a1a1a;
+        }
+        
+        .product-info {
+            padding: 15px;
+        }
+        
+        .product-obs {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 10px;
+            min-height: 35px;
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn-icon {
+            flex: 1;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            color: #888;
+            padding: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        
+        .btn-icon:hover {
+            border-color: #00F2EA;
+            color: #00F2EA;
+        }
+        
+        .btn-icon.delete:hover {
+            border-color: #FF0050;
+            color: #FF0050;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .modal.show {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: #0a0a0a;
+            border: 1px solid #1a1a1a;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .week-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .day-card {
+            background: #000;
+            border: 1px solid #1a1a1a;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .day-header {
+            font-weight: 700;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #1a1a1a;
+            color: #00F2EA;
+        }
+        
+        .person-section {
+            margin-bottom: 15px;
+        }
+        
+        .person-name {
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 14px;
+            text-transform: capitalize;
+        }
+        
+        .product-mini {
+            background: #1a1a1a;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            margin-bottom: 5px;
+            color: #888;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .team-card {
+            background: #000;
+            border: 1px solid #1a1a1a;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .team-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 700;
+            margin: 0 auto 15px;
+        }
+        
+        .team-name {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            text-transform: capitalize;
+        }
+        
+        .team-stats {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 20px;
+        }
+        
+        .alert {
+            background: rgba(255,0,80,0.1);
+            border: 1px solid rgba(255,0,80,0.3);
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            color: #FF0050;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .products-grid, .week-grid, .team-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+  <!-- HEADER -->
+    <div class="header">
+        <div class="logo">TikTok Shop Manager</div>
+        <button class="btn-logout" onclick="logout()">Sair</button>
+    </div>
+
+    <!-- CONTAINER -->
+    <div class="container">
+        <!-- TABS -->
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('dashboard')">Dashboard</div>
+            <div class="tab" onclick="showTab('products')">Produtos</div>
+            <div class="tab" onclick="showTab('distribution')">Distribuição</div>
+            <div class="tab" onclick="showTab('team')">Equipe</div>
+        </div>
+
+        <!-- TAB: DASHBOARD -->
+        <div id="dashboard" class="tab-content active">
+            <div class="stats-grid" id="statsGrid"></div>
+            <div id="alerts"></div>
+        </div>
+
+        <!-- TAB: PRODUTOS -->
+        <div id="products" class="tab-content">
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Adicionar Produtos</h2>
+                </div>
+                
+                <div class="upload-zone" id="uploadZone">
+                    <div>📸 Toque para adicionar fotos</div>
+                    <input type="file" id="fileInput" accept="image/*" multiple style="display: none;">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Categoria</label>
+                    <select class="form-select" id="category">
+                        <option value="campeoes">Produtos Campeões</option>
+                        <option value="roupas">Roupas</option>
+                        <option value="novos">Produtos Novos</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Observação (opcional)</label>
+                    <textarea class="form-textarea" id="observation"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Tags (opcional)</label>
+                    <input type="text" class="form-input" id="tags">
+                </div>
+                
+                <button class="btn-primary" onclick="uploadProducts()">Adicionar Produtos</button>
+            </div>
+            
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Produtos Campeões (<span id="campeoesCount">0</span>)</h2>
+                </div>
+                <div class="products-grid" id="campeoesGrid"></div>
+            </div>
+            
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Roupas (<span id="roupasCount">0</span>)</h2>
+                </div>
+                <div class="products-grid" id="roupasGrid"></div>
+            </div>
+            
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Produtos Novos (<span id="novosCount">0</span>)</h2>
+                </div>
+                <div class="products-grid" id="novosGrid"></div>
+            </div>
+        </div>
+
+        <!-- TAB: DISTRIBUIÇÃO -->
+        <div id="distribution" class="tab-content">
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Gerar Nova Distribuição</h2>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Data de Início (Segunda-feira)</label>
+                    <input type="date" class="form-input" id="weekStart">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Modo de Distribuição</label>
+                    <select class="form-select" id="distributionMode">
+                        <option value="different">Produtos Diferentes</option>
+                        <option value="same">Produtos Iguais</option>
+                    </select>
+                </div>
+                
+                <button class="btn-primary" onclick="generateDistribution()">Gerar Distribuição</button>
+            </div>
+            
+            <div class="section" id="distributionPreview" style="display: none;">
+                <div class="section-header">
+                    <h2 class="section-title">Prévia da Distribuição</h2>
+                    <button class="btn-primary" onclick="publishDistribution()">Publicar</button>
+                </div>
+                <div class="week-grid" id="weekGrid"></div>
+            </div>
+        </div>
+
+        <!-- TAB: EQUIPE -->
+        <div id="team" class="tab-content">
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Gerenciar Equipe</h2>
+                    <button class="btn-primary" onclick="showAddMemberModal()">+ Adicionar</button>
+                </div>
+                <div class="team-grid" id="teamGrid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: ADICIONAR MEMBRO -->
+    <div class="modal" id="addMemberModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Adicionar Membro</h3>
+                <button class="modal-close" onclick="closeModal('addMemberModal')">×</button>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Nome</label>
+                <input type="text" class="form-input" id="memberName">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Produtos por dia</label>
+                <input type="number" class="form-input" id="memberProducts" value="9">
+            </div>
+            
+            <button class="btn-primary" onclick="addMember()">Adicionar</button>
+        </div>
+    </div>
+
+    <!-- MODAL: EDITAR PRODUTO -->
+    <div class="modal" id="editProductModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Editar Produto</h3>
+                <button class="modal-close" onclick="closeModal('editProductModal')">×</button>
+            </div>
+            
+            <input type="hidden" id="editProductId">
+            
+            <div class="form-group">
+                <label class="form-label">Observação</label>
+                <textarea class="form-textarea" id="editObservation"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Tags</label>
+                <input type="text" class="form-input" id="editTags">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Status</label>
+                <select class="form-select" id="editStatus">
+                    <option value="active">Ativo</option>
+                    <option value="paused">Pausado</option>
+                    <option value="archived">Arquivado</option>
+                </select>
+            </div>
+            
+            <button class="btn-primary" onclick="updateProduct()">Salvar</button>
+        </div>
+    </div>
+    <script>
+        const API_URL = '/api';
+        let token = localStorage.getItem('token');
+        let currentDistributionId = null;
+        let selectedFiles = [];
+        
+        if (!token) window.location.href = '/';
+        
+        const headers = {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        };
+        
+        function logout() {
+            localStorage.clear();
+            window.location.href = '/';
+        }
+        
+        function showTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+            
+            if (tabName === 'dashboard') loadDashboard();
+            if (tabName === 'products') loadProducts();
+            if (tabName === 'team') loadTeam();
+        }
+        
+        // Upload
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+        
+        uploadZone.addEventListener('click', () => fileInput.click());
+        
+        fileInput.addEventListener('change', (e) => {
+            selectedFiles = Array.from(e.target.files);
+            if (selectedFiles.length > 0) {
+                uploadZone.innerHTML = `<div>✓ ${selectedFiles.length} arquivo(s)</div>`;
+            }
+        });
+        
+        async function uploadProducts() {
+            if (selectedFiles.length === 0) {
+                alert('Selecione imagens');
+                return;
+            }
+            
+            const category = document.getElementById('category').value;
+            const observation = document.getElementById('observation').value;
+            const tags = document.getElementById('tags').value;
+            
+            for (const file of selectedFiles) {
+                const formData = new FormData();
+                formData.append('image', file);
+                formData.append('category', category);
+                formData.append('observation', observation);
+                formData.append('tags', tags);
+                
+                await fetch(`${API_URL}/products`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` },
+                    body: formData
+                });
+            }
+            
+            alert('Produtos adicionados!');
+            selectedFiles = [];
+            fileInput.value = '';
+            document.getElementById('observation').value = '';
+            document.getElementById('tags').value = '';
+            uploadZone.innerHTML = '<div>📸 Toque para adicionar fotos</div>';
+            loadProducts();
+        }
+        
+        async function loadDashboard() {
+            const response = await fetch(`${API_URL}/products/stats`, { headers });
+            const data = await response.json();
+            
+            document.getElementById('statsGrid').innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-label">Total de Produtos</div>
+                    <div class="stat-value">${data.stats.total}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Campeões</div>
+                    <div class="stat-value">${data.stats.campeoes}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Roupas</div>
+                    <div class="stat-value">${data.stats.roupas}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Novos</div>
+                    <div class="stat-value">${data.stats.novos}</div>
+                </div>
+            `;
+            
+            let alerts = '';
+            if (data.stats.campeoes < 10) alerts += '<div class="alert">⚠️ Poucos produtos Campeões</div>';
+            if (data.stats.roupas < 10) alerts += '<div class="alert">⚠️ Poucos produtos Roupas</div>';
+            if (data.stats.novos < 10) alerts += '<div class="alert">⚠️ Poucos produtos Novos</div>';
+            document.getElementById('alerts').innerHTML = alerts;
+        }
+        
+        async function loadProducts() {
+            const response = await fetch(`${API_URL}/products`, { headers });
+            const data = await response.json();
+            
+            const campeoes = data.products.filter(p => p.category === 'campeoes');
+            const roupas = data.products.filter(p => p.category === 'roupas');
+            const novos = data.products.filter(p => p.category === 'novos');
+            
+            document.getElementById('campeoesCount').textContent = campeoes.length;
+            document.getElementById('roupasCount').textContent = roupas.length;
+            document.getElementById('novosCount').textContent = novos.length;
+            
+            document.getElementById('campeoesGrid').innerHTML = campeoes.map(p => createProductCard(p)).join('');
+            document.getElementById('roupasGrid').innerHTML = roupas.map(p => createProductCard(p)).join('');
+            document.getElementById('novosGrid').innerHTML = novos.map(p => createProductCard(p)).join('');
+        }
+        
+        function createProductCard(product) {
+            return `
+                <div class="product-card">
+                    <img src="${product.image_path}" class="product-image" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%231a1a1a%22 width=%22200%22 height=%22200%22/%3E%3C/svg%3E'">
+                    <div class="product-info">
+                        <div class="product-obs">${product.observation || 'Sem observação'}</div>
+                        <div class="product-actions">
+                            <button class="btn-icon" onclick="editProduct(${product.id}, '${product.observation}', '${product.tags}', '${product.status}')">Editar</button>
+                            <button class="btn-icon delete" onclick="deleteProduct(${product.id})">Excluir</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function editProduct(id, obs, tags, status) {
+            document.getElementById('editProductId').value = id;
+            document.getElementById('editObservation').value = obs;
+            document.getElementById('editTags').value = tags;
+            document.getElementById('editStatus').value = status;
+            document.getElementById('editProductModal').classList.add('show');
+        }
+        
+        async function updateProduct() {
+            const id = document.getElementById('editProductId').value;
+            const observation = document.getElementById('editObservation').value;
+            const tags = document.getElementById('editTags').value;
+            const status = document.getElementById('editStatus').value;
+            
+            await fetch(`${API_URL}/products/${id}`, {
+                method: 'PUT',
+                headers,
+                body: JSON.stringify({ observation, tags, status })
+            });
+            
+            closeModal('editProductModal');
+            loadProducts();
+        }
+        
+        async function deleteProduct(id) {
+            if (!confirm('Excluir produto?')) return;
+            
+            await fetch(`${API_URL}/products/${id}`, {
+                method: 'DELETE',
+                headers
+            });
+            
+            loadProducts();
+        }
+      async function generateDistribution() {
+            const weekStart = document.getElementById('weekStart').value;
+            const mode = document.getElementById('distributionMode').value;
+            
+            if (!weekStart) {
+                alert('Selecione a data');
+                return;
+            }
+            
+            const response = await fetch(`${API_URL}/distribution/generate`, {
+                method: 'POST',
+                headers,
+                body: JSON.stringify({ week_start: weekStart, distribution_mode: mode })
+            });
+            
+            const data = await response.json();
+            currentDistributionId = data.distribution_id;
+            
+            displayDistribution(data.distribution);
+        }
+        
+        function displayDistribution(dist) {
+            const dates = Object.keys(dist);
+            const weekGrid = document.getElementById('weekGrid');
+            
+            weekGrid.innerHTML = dates.map(date => {
+                const dayData = dist[date];
+                const members = Object.keys(dayData);
+                
+                return `
+                    <div class="day-card">
+                        <div class="day-header">${formatDate(date)}</div>
+                        ${members.map(memberId => {
+                            const member = dayData[memberId];
+                            const total = member.products.campeoes.length + 
+                                        member.products.roupas.length + 
+                                        member.products.novos.length;
+                            return `
+                                <div class="person-section">
+                                    <div class="person-name">${member.memberName}</div>
+                                    <div class="product-mini">
+                                        <span>Total</span>
+                                        <span>${total}</span>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+            }).join('');
+            
+            document.getElementById('distributionPreview').style.display = 'block';
+        }
+        
+        async function publishDistribution() {
+            if (!currentDistributionId) return;
+            
+            await fetch(`${API_URL}/distribution/publish/${currentDistributionId}`, {
+                method: 'POST',
+                headers
+            });
+            
+            alert('Distribuição publicada!');
+            document.getElementById('distributionPreview').style.display = 'none';
+        }
+        
+        async function loadTeam() {
+            const response = await fetch(`${API_URL}/team`, { headers });
+            const data = await response.json();
+            
+            document.getElementById('teamGrid').innerHTML = data.members.map(m => `
+                <div class="team-card">
+                    <div class="team-avatar">${m.name.charAt(0).toUpperCase()}</div>
+                    <div class="team-name">${m.name}</div>
+                    <div class="team-stats">${m.products_per_day} produtos/dia</div>
+                    <button class="btn-secondary" onclick="deleteMember(${m.id})">Remover</button>
+                </div>
+            `).join('');
+        }
+        
+        function showAddMemberModal() {
+            document.getElementById('addMemberModal').classList.add('show');
+        }
+        
+        async function addMember() {
+            const name = document.getElementById('memberName').value;
+            const products = document.getElementById('memberProducts').value;
+            
+            if (!name) {
+                alert('Digite o nome');
+                return;
+            }
+            
+            await fetch(`${API_URL}/team`, {
+                method: 'POST',
+                headers,
+                body: JSON.stringify({ name, products_per_day: parseInt(products) })
+            });
+            
+            closeModal('addMemberModal');
+            loadTeam();
+        }
+        
+        async function deleteMember(id) {
+            if (!confirm('Remover membro?')) return;
+            
+            await fetch(`${API_URL}/team/${id}`, {
+                method: 'DELETE',
+                headers
+            });
+            
+            loadTeam();
+        }
+        
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('show');
+        }
+        
+        function formatDate(dateStr) {
+            const date = new Date(dateStr + 'T00:00:00');
+            const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+            return `${days[date.getDay()]} - ${date.getDate()}/${date.getMonth() + 1}`;
+        }
+        
+        // Carregar dashboard ao iniciar
+        loadDashboard();
+    </script>
+</body>
+</html>
