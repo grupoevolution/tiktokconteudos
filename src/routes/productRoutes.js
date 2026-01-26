@@ -146,21 +146,46 @@ router.delete('/:id', authMiddleware, (req, res) => {
   }
 });
 
-// Obter estatísticas
+// Obter estatísticas - CORRIGIDO
 router.get('/stats', authMiddleware, (req, res) => {
   try {
-    const total = db.prepare('SELECT COUNT(*) as count FROM products WHERE status = "active"').get().count;
-    const campeoes = db.prepare('SELECT COUNT(*) as count FROM products WHERE category = "campeoes" AND status = "active"').get().count;
-    const roupas = db.prepare('SELECT COUNT(*) as count FROM products WHERE category = "roupas" AND status = "active"').get().count;
-    const novos = db.prepare('SELECT COUNT(*) as count FROM products WHERE category = "novos" AND status = "active"').get().count;
+    console.log('Buscando estatísticas de produtos...');
+    
+    // Contar produtos sem filtrar por status (caso a coluna não exista)
+    let total, campeoes, roupas, novos;
+    
+    try {
+      // Tentar com a coluna status
+      total = db.prepare('SELECT COUNT(*) as count FROM products WHERE status = ?').get('active').count;
+      campeoes = db.prepare('SELECT COUNT(*) as count FROM products WHERE category = ? AND status = ?').get('campeoes', 'active').count;
+      roupas = db.prepare('SELECT COUNT(*) as count FROM products WHERE category = ? AND status = ?').get('roupas', 'active').count;
+      novos = db.prepare('SELECT COUNT(*) as count FROM products WHERE category = ? AND status = ?').get('novos', 'active').count;
+    } catch (error) {
+      // Se der erro, buscar sem filtro de status
+      console.log('Coluna status não existe, buscando todos os produtos');
+      total = db.prepare('SELECT COUNT(*) as count FROM products').get().count;
+      campeoes = db.prepare('SELECT COUNT(*) as count FROM products WHERE category = ?').get('campeoes').count;
+      roupas = db.prepare('SELECT COUNT(*) as count FROM products WHERE category = ?').get('roupas').count;
+      novos = db.prepare('SELECT COUNT(*) as count FROM products WHERE category = ?').get('novos').count;
+    }
+
+    console.log('Estatísticas:', { total, campeoes, roupas, novos });
 
     res.json({
       success: true,
-      stats: { total, campeoes, roupas, novos }
+      stats: { 
+        total: total || 0, 
+        campeoes: campeoes || 0, 
+        roupas: roupas || 0, 
+        novos: novos || 0 
+      }
     });
   } catch (error) {
     console.error('Erro ao obter estatísticas:', error);
-    res.status(500).json({ error: 'Erro ao obter estatísticas' });
+    res.status(500).json({ 
+      error: 'Erro ao obter estatísticas',
+      message: error.message 
+    });
   }
 });
 
