@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - TikTok Shop Manager</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000000;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .logo-text {
+            font-size: 32px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .logo-subtitle {
+            color: #888;
+            font-size: 14px;
+        }
+        
+        .login-box {
+            background: #0a0a0a;
+            border: 1px solid #1a1a1a;
+            border-radius: 20px;
+            padding: 40px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-label {
+            display: block;
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .form-input {
+            width: 100%;
+            background: #000;
+            border: 2px solid #1a1a1a;
+            color: #FFF;
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #00F2EA;
+            box-shadow: 0 0 0 3px rgba(0,242,234,0.1);
+        }
+        
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
+            color: #000;
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,242,234,0.4);
+        }
+        
+        .login-btn:active {
+            transform: translateY(0);
+        }
+        
+        .login-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .error-message {
+            background: rgba(255,0,80,0.1);
+            border: 1px solid rgba(255,0,80,0.3);
+            color: #FF0050;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+        
+        .error-message.show {
+            display: block;
+            animation: shake 0.5s;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #000;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            margin-right: 8px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 480px) {
+            .login-box {
+                padding: 30px 20px;
+            }
+            
+            .logo-text {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <div class="logo-text">TikTok Shop</div>
+            <div class="logo-subtitle">Sistema de Gestão de Produtos</div>
+        </div>
+        
+        <div class="login-box">
+            <div id="errorMessage" class="error-message"></div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="form-label">Email / Usuário</label>
+                    <input 
+                        type="text" 
+                        class="form-input" 
+                        id="email" 
+                        placeholder="Digite seu email"
+                        autocomplete="username"
+                        required
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Senha</label>
+                    <input 
+                        type="password" 
+                        class="form-input" 
+                        id="password" 
+                        placeholder="Digite sua senha"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+                
+                <button type="submit" class="login-btn" id="loginBtn">
+                    Entrar
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const loginForm = document.getElementById('loginForm');
+        const loginBtn = document.getElementById('loginBtn');
+        const errorMessage = document.getElementById('errorMessage');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.classList.add('show');
+            setTimeout(() => {
+                errorMessage.classList.remove('show');
+            }, 5000);
+        }
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+
+            if (!email || !password) {
+                showError('Preencha todos os campos');
+                return;
+            }
+
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<span class="loading"></span>Entrando...';
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    window.location.href = '/admin';
+                } else {
+                    showError(data.error || 'Erro ao fazer login');
+                    loginBtn.disabled = false;
+                    loginBtn.innerHTML = 'Entrar';
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showError('Erro ao conectar com o servidor');
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = 'Entrar';
+            }
+        });
+
+        // Verificar se já está logado
+        const token = localStorage.getItem('token');
+        if (token) {
+            fetch('/api/auth/verify', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = '/admin';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
