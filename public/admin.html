@@ -104,6 +104,12 @@
             border: 1px solid #1a1a1a;
             border-radius: 15px;
             padding: 25px;
+            transition: all 0.3s;
+        }
+        
+        .stat-card:hover {
+            border-color: #00F2EA;
+            transform: translateY(-2px);
         }
         
         .stat-label {
@@ -151,6 +157,12 @@
             font-weight: 700;
             cursor: pointer;
             font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,242,234,0.4);
         }
         
         .btn-secondary {
@@ -162,6 +174,10 @@
             font-weight: 700;
             cursor: pointer;
             font-size: 14px;
+        }
+        
+        .btn-secondary:hover {
+            border-color: #00F2EA;
         }
         
         .upload-zone {
@@ -197,6 +213,11 @@
             padding: 12px 15px;
             border-radius: 10px;
             font-size: 14px;
+        }
+        
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #00F2EA;
         }
         
         .form-textarea {
@@ -401,6 +422,318 @@
             color: #FF0050;
             font-size: 14px;
         }
+        /* DASHBOARD MELHORADO */
+        .performance-card {
+            background: #000;
+            border: 1px solid #1a1a1a;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+        
+        .performance-card:hover {
+            border-color: #00F2EA;
+            transform: translateX(5px);
+        }
+        
+        .performance-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .performance-name {
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        
+        .performance-badge {
+            background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        
+        .performance-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        
+        .performance-stat {
+            text-align: center;
+        }
+        
+        .performance-stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #00F2EA;
+        }
+        
+        .performance-stat-label {
+            font-size: 11px;
+            color: #888;
+            margin-top: 5px;
+        }
+        
+        .performance-bar {
+            margin-top: 15px;
+        }
+        
+        .performance-bar-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 8px;
+        }
+        
+        .performance-bar-track {
+            width: 100%;
+            height: 8px;
+            background: #1a1a1a;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .performance-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00F2EA 0%, #FF0050 100%);
+            border-radius: 10px;
+            transition: width 0.5s;
+        }
+        
+        .top-product-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #000;
+            border: 1px solid #1a1a1a;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            transition: all 0.3s;
+        }
+        
+        .top-product-item:hover {
+            border-color: #00F2EA;
+            transform: translateX(5px);
+        }
+        
+        .top-product-rank {
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
+            color: #000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        
+        .top-product-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: #1a1a1a;
+            flex-shrink: 0;
+        }
+        
+        .top-product-info {
+            flex: 1;
+        }
+        
+        .top-product-category {
+            font-size: 11px;
+            color: #888;
+            text-transform: uppercase;
+            margin-bottom: 3px;
+        }
+        
+        .top-product-obs {
+            font-size: 13px;
+            color: #FFF;
+            margin-bottom: 5px;
+        }
+        
+        .top-product-usage {
+            font-size: 12px;
+            color: #00F2EA;
+            font-weight: 600;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        .summary-item {
+            background: #000;
+            border: 1px solid #1a1a1a;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .summary-value {
+            font-size: 32px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+        
+        .summary-label {
+            font-size: 12px;
+            color: #888;
+        }
+        
+        .activity-timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .activity-timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #1a1a1a;
+        }
+        
+        .activity-item {
+            position: relative;
+            padding-bottom: 25px;
+        }
+        
+        .activity-item:last-child {
+            padding-bottom: 0;
+        }
+        
+        .activity-dot {
+            position: absolute;
+            left: -26px;
+            top: 5px;
+            width: 18px;
+            height: 18px;
+            background: #00F2EA;
+            border-radius: 50%;
+            border: 3px solid #000;
+            z-index: 1;
+        }
+        
+        .activity-content {
+            background: #000;
+            border: 1px solid #1a1a1a;
+            border-radius: 8px;
+            padding: 12px 15px;
+        }
+        
+        .activity-text {
+            font-size: 13px;
+            color: #FFF;
+            margin-bottom: 5px;
+        }
+        
+        .activity-time {
+            font-size: 11px;
+            color: #888;
+        }
+        
+        .goals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .goal-card {
+            background: #000;
+            border: 1px solid #1a1a1a;
+            border-radius: 12px;
+            padding: 25px;
+        }
+        
+        .goal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .goal-title {
+            font-size: 16px;
+            font-weight: 700;
+        }
+        
+        .goal-status {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        
+        .goal-status.completed {
+            background: rgba(0,242,234,0.2);
+            color: #00F2EA;
+        }
+        
+        .goal-status.in-progress {
+            background: rgba(255,0,80,0.2);
+            color: #FF0050;
+        }
+        
+        .goal-progress {
+            margin-top: 15px;
+        }
+        
+        .goal-progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .goal-progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #1a1a1a;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .goal-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00F2EA 0%, #FF0050 100%);
+            border-radius: 10px;
+            transition: width 0.5s;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+        }
         
         @media (max-width: 768px) {
             .header {
@@ -408,14 +741,22 @@
                 gap: 15px;
             }
             
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
             .products-grid, .week-grid, .team-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tabs {
                 grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-  <!-- HEADER -->
+    <!-- HEADER -->
     <div class="header">
         <div class="logo">TikTok Shop Manager</div>
         <button class="btn-logout" onclick="logout()">Sair</button>
@@ -431,10 +772,51 @@
             <div class="tab" onclick="showTab('team')">Equipe</div>
         </div>
 
-        <!-- TAB: DASHBOARD -->
+        <!-- TAB: DASHBOARD MELHORADO -->
         <div id="dashboard" class="tab-content active">
             <div class="stats-grid" id="statsGrid"></div>
             <div id="alerts"></div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 30px;">
+                <div style="display: flex; flex-direction: column; gap: 30px;">
+                    <div class="section">
+                        <div class="section-header">
+                            <h2 class="section-title">Performance da Equipe</h2>
+                        </div>
+                        <div id="teamPerformance"></div>
+                    </div>
+                    
+                    <div class="section">
+                        <div class="section-header">
+                            <h2 class="section-title">Top 5 Produtos</h2>
+                        </div>
+                        <div id="topProducts"></div>
+                    </div>
+                </div>
+                
+                <div style="display: flex; flex-direction: column; gap: 30px;">
+                    <div class="section">
+                        <div class="section-header">
+                            <h2 class="section-title">Resumo Semanal</h2>
+                        </div>
+                        <div id="weekSummary"></div>
+                    </div>
+                    
+                    <div class="section">
+                        <div class="section-header">
+                            <h2 class="section-title">Atividades Recentes</h2>
+                        </div>
+                        <div id="recentActivity"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section" style="margin-top: 30px;">
+                <div class="section-header">
+                    <h2 class="section-title">Metas da Semana</h2>
+                </div>
+                <div id="weeklyGoals"></div>
+            </div>
         </div>
 
         <!-- TAB: PRODUTOS -->
@@ -591,6 +973,7 @@
             <button class="btn-primary" onclick="updateProduct()">Salvar</button>
         </div>
     </div>
+
     <script>
         const API_URL = '/api';
         let token = localStorage.getItem('token');
@@ -621,12 +1004,10 @@
             if (tabName === 'team') loadTeam();
         }
         
-        // Upload
         const uploadZone = document.getElementById('uploadZone');
         const fileInput = document.getElementById('fileInput');
         
         uploadZone.addEventListener('click', () => fileInput.click());
-        
         fileInput.addEventListener('change', (e) => {
             selectedFiles = Array.from(e.target.files);
             if (selectedFiles.length > 0) {
@@ -665,36 +1046,206 @@
             document.getElementById('tags').value = '';
             uploadZone.innerHTML = '<div>📸 Toque para adicionar fotos</div>';
             loadProducts();
+            loadDashboard();
         }
         
         async function loadDashboard() {
-            const response = await fetch(`${API_URL}/products/stats`, { headers });
-            const data = await response.json();
-            
-            document.getElementById('statsGrid').innerHTML = `
-                <div class="stat-card">
-                    <div class="stat-label">Total de Produtos</div>
-                    <div class="stat-value">${data.stats.total}</div>
+            try {
+                const statsResponse = await fetch(`${API_URL}/products/stats`, { headers });
+                const statsData = await statsResponse.json();
+                const stats = statsData.stats;
+                
+                const teamResponse = await fetch(`${API_URL}/team`, { headers });
+                const teamData = await teamResponse.json();
+                
+                const productsResponse = await fetch(`${API_URL}/products`, { headers });
+                const productsData = await productsResponse.json();
+                
+                document.getElementById('statsGrid').innerHTML = `
+                    <div class="stat-card">
+                        <div class="stat-label">Total de Produtos</div>
+                        <div class="stat-value">${stats.total || 0}</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Produtos Campeões</div>
+                        <div class="stat-value">${stats.campeoes || 0}</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Roupas</div>
+                        <div class="stat-value">${stats.roupas || 0}</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Produtos Novos</div>
+                        <div class="stat-value">${stats.novos || 0}</div>
+                    </div>
+                `;
+                
+                renderAlerts(stats);
+                await renderTeamPerformance(teamData.members);
+                renderTopProducts(productsData.products);
+                renderWeekSummary(stats, teamData.members);
+                renderRecentActivity();
+                renderWeeklyGoals(teamData.members, stats);
+                
+            } catch (error) {
+                console.error('Erro ao carregar dashboard:', error);
+            }
+        }
+        
+        function renderAlerts(stats) {
+            let alerts = '';
+            if (stats.total === 0) {
+                alerts += '<div class="alert">⚠️ Nenhum produto cadastrado. Adicione produtos para começar!</div>';
+            } else {
+                if (stats.campeoes < 10) alerts += '<div class="alert">⚠️ Poucos produtos Campeões. Recomendado: mínimo 15.</div>';
+                if (stats.roupas < 10) alerts += '<div class="alert">⚠️ Poucos produtos Roupas. Recomendado: mínimo 15.</div>';
+                if (stats.novos < 10) alerts += '<div class="alert">⚠️ Poucos produtos Novos. Recomendado: mínimo 15.</div>';
+            }
+            if (!alerts && stats.total >= 30) {
+                alerts = '<div class="alert" style="background: rgba(0,242,234,0.1); border-color: rgba(0,242,234,0.3); color: #00F2EA;">✓ Sistema pronto!</div>';
+            }
+            document.getElementById('alerts').innerHTML = alerts;
+        }
+        
+        async function renderTeamPerformance(members) {
+            let html = '';
+            for (const member of members) {
+                try {
+                    const response = await fetch(`${API_URL}/team/${member.id}/stats`, { headers });
+                    const data = await response.json();
+                    const stats = data.stats;
+                    const completionRate = stats.totalVideos > 0 ? Math.round((stats.completed / stats.totalVideos) * 100) : 0;
+                    
+                    html += `
+                        <div class="performance-card">
+                            <div class="performance-header">
+                                <div class="performance-name">${member.name}</div>
+                                <div class="performance-badge">${member.products_per_day}/dia</div>
+                            </div>
+                            <div class="performance-stats">
+                                <div class="performance-stat">
+                                    <div class="performance-stat-value">${stats.totalVideos || 0}</div>
+                                    <div class="performance-stat-label">Total</div>
+                                </div>
+                                <div class="performance-stat">
+                                    <div class="performance-stat-value">${stats.completed || 0}</div>
+                                    <div class="performance-stat-label">Concluídos</div>
+                                </div>
+                                <div class="performance-stat">
+                                    <div class="performance-stat-value">${stats.pending || 0}</div>
+                                    <div class="performance-stat-label">Pendentes</div>
+                                </div>
+                            </div>
+                            <div class="performance-bar">
+                                <div class="performance-bar-label">
+                                    <span>Taxa de Conclusão</span>
+                                    <span>${completionRate}%</span>
+                                </div>
+                                <div class="performance-bar-track">
+                                    <div class="performance-bar-fill" style="width: ${completionRate}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } catch (error) {
+                    console.error(`Erro ao carregar stats de ${member.name}:`, error);
+                }
+            }
+            if (!html) html = '<div style="text-align: center; color: #888; padding: 40px;">Nenhum dado disponível</div>';
+            document.getElementById('teamPerformance').innerHTML = html;
+        }
+        
+        function renderTopProducts(products) {
+            const sorted = products.filter(p => p.times_used > 0).sort((a, b) => b.times_used - a.times_used).slice(0, 5);
+            if (sorted.length === 0) {
+                document.getElementById('topProducts').innerHTML = '<div style="text-align: center; color: #888; padding: 40px;">Nenhum produto usado ainda</div>';
+                return;
+            }
+            const html = sorted.map((p, i) => `
+                <div class="top-product-item">
+                    <div class="top-product-rank">${i + 1}</div>
+                    <img src="${p.image_path}" class="top-product-image">
+                    <div class="top-product-info">
+                        <div class="top-product-category">${p.category}</div>
+                        <div class="top-product-obs">${p.observation || 'Sem observação'}</div>
+                        <div class="top-product-usage">Usado ${p.times_used}x</div>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-label">Campeões</div>
-                    <div class="stat-value">${data.stats.campeoes}</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Roupas</div>
-                    <div class="stat-value">${data.stats.roupas}</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Novos</div>
-                    <div class="stat-value">${data.stats.novos}</div>
+            `).join('');
+            document.getElementById('topProducts').innerHTML = html;
+        }
+        
+        function renderWeekSummary(stats, members) {
+            const html = `
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <div class="summary-value">${members.length}</div>
+                        <div class="summary-label">Membros Ativos</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-value">${stats.total}</div>
+                        <div class="summary-label">Produtos Cadastrados</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-value">${members.length * 9 * 5}</div>
+                        <div class="summary-label">Vídeos/Semana</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-value">${members.length * 9}</div>
+                        <div class="summary-label">Vídeos/Dia</div>
+                    </div>
                 </div>
             `;
-            
-            let alerts = '';
-            if (data.stats.campeoes < 10) alerts += '<div class="alert">⚠️ Poucos produtos Campeões</div>';
-            if (data.stats.roupas < 10) alerts += '<div class="alert">⚠️ Poucos produtos Roupas</div>';
-            if (data.stats.novos < 10) alerts += '<div class="alert">⚠️ Poucos produtos Novos</div>';
-            document.getElementById('alerts').innerHTML = alerts;
+            document.getElementById('weekSummary').innerHTML = html;
+        }
+        
+        function renderRecentActivity() {
+            const html = `
+                <div class="activity-timeline">
+                    <div class="activity-item">
+                        <div class="activity-dot"></div>
+                        <div class="activity-content">
+                            <div class="activity-text">Dashboard carregado</div>
+                            <div class="activity-time">Agora</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('recentActivity').innerHTML = html;
+        }
+        
+        function renderWeeklyGoals(members, stats) {
+            const totalNeeded = members.length * 9 * 5;
+            const hasEnough = stats.total >= totalNeeded;
+            const goals = [
+                { title: 'Produtos Suficientes', current: stats.total, target: totalNeeded, status: hasEnough ? 'completed' : 'in-progress' },
+                { title: 'Equipe Completa', current: members.length, target: members.length, status: 'completed' }
+            ];
+            const html = `
+                <div class="goals-grid">
+                    ${goals.map(g => {
+                        const percent = Math.min(100, Math.round((g.current / g.target) * 100));
+                        return `
+                            <div class="goal-card">
+                                <div class="goal-header">
+                                    <div class="goal-title">${g.title}</div>
+                                    <div class="goal-status ${g.status}">${g.status === 'completed' ? 'Completo' : 'Em Andamento'}</div>
+                                </div>
+                                <div class="goal-progress">
+                                    <div class="goal-progress-label">
+                                        <span>${g.current} / ${g.target}</span>
+                                        <span>${percent}%</span>
+                                    </div>
+                                    <div class="goal-progress-bar">
+                                        <div class="goal-progress-fill" style="width: ${percent}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+            document.getElementById('weeklyGoals').innerHTML = html;
         }
         
         async function loadProducts() {
@@ -721,7 +1272,7 @@
                     <div class="product-info">
                         <div class="product-obs">${product.observation || 'Sem observação'}</div>
                         <div class="product-actions">
-                            <button class="btn-icon" onclick="editProduct(${product.id}, '${product.observation}', '${product.tags}', '${product.status}')">Editar</button>
+                            <button class="btn-icon" onclick="editProduct(${product.id}, '${(product.observation || '').replace(/'/g, "\\'")}', '${product.tags || ''}', '${product.status}')">Editar</button>
                             <button class="btn-icon delete" onclick="deleteProduct(${product.id})">Excluir</button>
                         </div>
                     </div>
@@ -755,15 +1306,12 @@
         
         async function deleteProduct(id) {
             if (!confirm('Excluir produto?')) return;
-            
-            await fetch(`${API_URL}/products/${id}`, {
-                method: 'DELETE',
-                headers
-            });
-            
+            await fetch(`${API_URL}/products/${id}`, { method: 'DELETE', headers });
             loadProducts();
+            loadDashboard();
         }
-    async function generateDistribution() {
+        
+        async function generateDistribution() {
             const weekStart = document.getElementById('weekStart').value;
             const mode = document.getElementById('distributionMode').value;
             
@@ -779,7 +1327,6 @@
             });
             
             const data = await response.json();
-            
             if (!data.success) {
                 alert(data.message || 'Erro ao gerar distribuição');
                 return;
@@ -791,48 +1338,35 @@
         
         function displayDistribution(dist) {
             const dates = Object.keys(dist);
-            const weekGrid = document.getElementById('weekGrid');
-            
-            weekGrid.innerHTML = dates.map(date => {
+            const html = dates.map(date => {
                 const dayData = dist[date];
                 const members = Object.keys(dayData);
-                
                 return `
                     <div class="day-card">
                         <div class="day-header">${formatDate(date)}</div>
                         ${members.map(memberId => {
                             const member = dayData[memberId];
-                            const total = member.products.campeoes.length + 
-                                        member.products.roupas.length + 
-                                        member.products.novos.length;
+                            const total = member.products.campeoes.length + member.products.roupas.length + member.products.novos.length;
                             return `
                                 <div class="person-section">
                                     <div class="person-name">${member.memberName}</div>
-                                    <div class="product-mini">
-                                        <span>Total</span>
-                                        <span>${total}</span>
-                                    </div>
+                                    <div class="product-mini"><span>Total</span><span>${total}</span></div>
                                 </div>
                             `;
                         }).join('')}
                     </div>
                 `;
             }).join('');
-            
+            document.getElementById('weekGrid').innerHTML = html;
             document.getElementById('distributionPreview').style.display = 'block';
         }
         
         async function publishDistribution() {
             if (!currentDistributionId) return;
+            if (!confirm('Publicar distribuição?')) return;
             
-            if (!confirm('Publicar esta distribuição? Os funcionários verão os produtos.')) return;
-            
-            await fetch(`${API_URL}/distribution/publish/${currentDistributionId}`, {
-                method: 'POST',
-                headers
-            });
-            
-            alert('Distribuição publicada com sucesso!');
+            await fetch(`${API_URL}/distribution/publish/${currentDistributionId}`, { method: 'POST', headers });
+            alert('Distribuição publicada!');
             document.getElementById('distributionPreview').style.display = 'none';
             document.getElementById('weekStart').value = '';
         }
@@ -860,18 +1394,15 @@
         async function addMember() {
             const name = document.getElementById('memberName').value;
             const products = document.getElementById('memberProducts').value;
-            
             if (!name) {
                 alert('Digite o nome');
                 return;
             }
-            
             await fetch(`${API_URL}/team`, {
                 method: 'POST',
                 headers,
                 body: JSON.stringify({ name, products_per_day: parseInt(products) })
             });
-            
             closeModal('addMemberModal');
             loadTeam();
             alert(`Membro ${name} adicionado! Acesse: ${window.location.origin}/${name}`);
@@ -879,15 +1410,11 @@
         
         async function deleteMember(id) {
             if (!confirm('Remover membro?')) return;
-            
             try {
-                await fetch(`${API_URL}/team/${id}`, {
-                    method: 'DELETE',
-                    headers
-                });
+                await fetch(`${API_URL}/team/${id}`, { method: 'DELETE', headers });
                 loadTeam();
             } catch (error) {
-                alert('Erro ao remover. Membro pode ter distribuições associadas.');
+                alert('Erro ao remover.');
             }
         }
         
@@ -901,46 +1428,23 @@
             return `${days[date.getDay()]} - ${date.getDate()}/${date.getMonth() + 1}`;
         }
         
-        // Adicionar CSS para animação de loading
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes spin {
-                to { transform: rotate(360deg); }
-            }
-        `;
-        document.head.appendChild(style);
-        
-        // Verificar autenticação e carregar dashboard
-        async function checkAuth() {
+        async function init() {
             try {
                 const response = await fetch(`${API_URL}/auth/verify`, { headers });
                 const data = await response.json();
-                
                 if (!data.success) {
                     localStorage.clear();
                     window.location.href = '/';
-                    return false;
+                    return;
                 }
-                return true;
+                await loadDashboard();
             } catch (error) {
-                console.error('Erro na autenticação:', error);
+                console.error('Erro:', error);
                 localStorage.clear();
                 window.location.href = '/';
-                return false;
             }
         }
         
-        async function init() {
-            console.log('Iniciando painel admin...');
-            
-            const isAuth = await checkAuth();
-            if (!isAuth) return;
-            
-            console.log('Carregando dashboard...');
-            await loadDashboard();
-        }
-        
-        // Iniciar
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', init);
         } else {
