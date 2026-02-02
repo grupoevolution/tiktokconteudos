@@ -24,7 +24,6 @@ router.post('/', authMiddleware, (req, res) => {
       return res.status(400).json({ error: 'Nome é obrigatório' });
     }
 
-    // Verificar se já existe
     const exists = db.prepare('SELECT * FROM team_members WHERE LOWER(name) = ?').get(name.toLowerCase());
     if (exists) {
       return res.status(400).json({ error: 'Membro já existe' });
@@ -33,14 +32,14 @@ router.post('/', authMiddleware, (req, res) => {
     const result = db.prepare(`
       INSERT INTO team_members (name, products_per_day, active)
       VALUES (?, ?, 1)
-    `).run(name.toLowerCase(), products_per_day || 9);
+    `).run(name.toLowerCase(), products_per_day || 6);
 
     res.json({
       success: true,
       member: {
         id: result.lastInsertRowid,
         name: name.toLowerCase(),
-        products_per_day: products_per_day || 9,
+        products_per_day: products_per_day || 6,
         active: 1
       }
     });
@@ -50,7 +49,7 @@ router.post('/', authMiddleware, (req, res) => {
   }
 });
 
-// Atualizar membro
+// Atualizar membro (incluindo products_per_day)
 router.put('/:id', authMiddleware, (req, res) => {
   try {
     const { id } = req.params;
@@ -71,12 +70,29 @@ router.put('/:id', authMiddleware, (req, res) => {
   }
 });
 
+// Atualizar produtos por dia de TODOS os membros de uma vez
+router.put('/all/products-per-day', authMiddleware, (req, res) => {
+  try {
+    const { products_per_day } = req.body;
+    
+    if (!products_per_day || products_per_day < 6) {
+      return res.status(400).json({ error: 'Mínimo de 6 produtos por dia' });
+    }
+
+    db.prepare('UPDATE team_members SET products_per_day = ?').run(products_per_day);
+
+    res.json({ success: true, message: `Todos os membros agora recebem ${products_per_day} produtos/dia` });
+  } catch (error) {
+    console.error('Erro ao atualizar produtos por dia:', error);
+    res.status(500).json({ error: 'Erro ao atualizar produtos por dia' });
+  }
+});
+
 // Deletar membro
 router.delete('/:id', authMiddleware, (req, res) => {
   try {
     const { id } = req.params;
     
-    // Verificar se tem distribuições associadas
     const hasDistributions = db.prepare('SELECT COUNT(*) as count FROM employee_products WHERE member_id = ?').get(id).count;
     
     if (hasDistributions > 0) {
