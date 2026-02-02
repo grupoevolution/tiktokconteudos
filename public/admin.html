@@ -77,6 +77,7 @@
             border-radius: 10px;
             color: #888;
             font-weight: 600;
+            transition: all 0.3s;
         }
         
         .tab.active {
@@ -94,7 +95,7 @@
         
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
             margin-bottom: 40px;
         }
@@ -114,12 +115,12 @@
         
         .stat-label {
             color: #888;
-            font-size: 14px;
+            font-size: 13px;
             margin-bottom: 10px;
         }
         
         .stat-value {
-            font-size: 36px;
+            font-size: 32px;
             font-weight: 700;
             background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
             -webkit-background-clip: text;
@@ -144,7 +145,7 @@
         }
         
         .section-title {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
         }
         
@@ -180,19 +181,6 @@
             border-color: #00F2EA;
         }
         
-        .upload-zone {
-            border: 2px dashed #2a2a2a;
-            border-radius: 15px;
-            padding: 60px 30px;
-            text-align: center;
-            cursor: pointer;
-            margin-bottom: 20px;
-        }
-        
-        .upload-zone:hover {
-            border-color: #00F2EA;
-        }
-        
         .form-group {
             margin-bottom: 20px;
         }
@@ -200,7 +188,7 @@
         .form-label {
             display: block;
             color: #888;
-            font-size: 14px;
+            font-size: 13px;
             margin-bottom: 8px;
             font-weight: 600;
         }
@@ -222,7 +210,27 @@
         
         .form-textarea {
             resize: vertical;
-            min-height: 80px;
+            min-height: 100px;
+        }
+        
+        .upload-zone {
+            border: 2px dashed #2a2a2a;
+            border-radius: 15px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+        
+        .upload-zone:hover {
+            border-color: #00F2EA;
+            background: rgba(0,242,234,0.05);
+        }
+        
+        .upload-text {
+            color: #888;
+            font-size: 14px;
         }
         
         .products-grid {
@@ -236,33 +244,36 @@
             border: 1px solid #1a1a1a;
             border-radius: 12px;
             overflow: hidden;
+            transition: all 0.3s;
         }
         
         .product-card:hover {
             border-color: #00F2EA;
+            transform: translateY(-3px);
         }
         
         .product-image {
             width: 100%;
-            height: 200px;
+            height: 180px;
             object-fit: cover;
             background: #1a1a1a;
         }
         
         .product-info {
-            padding: 15px;
+            padding: 12px;
         }
         
-        .product-obs {
-            font-size: 12px;
+        .product-category {
+            font-size: 10px;
             color: #888;
-            margin-bottom: 10px;
-            min-height: 35px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
         }
         
         .product-actions {
             display: flex;
             gap: 8px;
+            margin-top: 10px;
         }
         
         .btn-icon {
@@ -274,6 +285,7 @@
             border-radius: 8px;
             cursor: pointer;
             font-size: 11px;
+            transition: all 0.3s;
         }
         
         .btn-icon:hover {
@@ -286,6 +298,12 @@
             color: #FF0050;
         }
         
+        .btn-icon.validate {
+            background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
+            color: #000;
+            border: none;
+        }
+        
         .modal {
             display: none;
             position: fixed;
@@ -293,7 +311,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.9);
             z-index: 1000;
             align-items: center;
             justify-content: center;
@@ -309,7 +327,7 @@
             border: 1px solid #1a1a1a;
             border-radius: 20px;
             padding: 30px;
-            max-width: 500px;
+            max-width: 600px;
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
@@ -322,6 +340,11 @@
             margin-bottom: 25px;
         }
         
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+        
         .modal-close {
             background: none;
             border: none;
@@ -330,47 +353,42 @@
             cursor: pointer;
         }
         
-        .week-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+        .alert {
+            background: rgba(255,0,80,0.1);
+            border: 1px solid rgba(255,0,80,0.3);
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            color: #FF0050;
+            font-size: 13px;
         }
         
-        .day-card {
+        .alert.success {
+            background: rgba(0,242,234,0.1);
+            border-color: rgba(0,242,234,0.3);
+            color: #00F2EA;
+        }
+        
+        .config-card {
             background: #000;
             border: 1px solid #1a1a1a;
             border-radius: 12px;
             padding: 20px;
+            margin-bottom: 20px;
         }
         
-        .day-header {
-            font-weight: 700;
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #1a1a1a;
-            color: #00F2EA;
-        }
-        
-        .person-section {
-            margin-bottom: 15px;
-        }
-        
-        .person-name {
-            font-weight: 600;
-            margin-bottom: 10px;
+        .config-label {
             font-size: 14px;
-            text-transform: capitalize;
+            color: #888;
+            margin-bottom: 10px;
+            font-weight: 600;
         }
         
-        .product-mini {
-            background: #1a1a1a;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            margin-bottom: 5px;
-            color: #888;
-            display: flex;
-            justify-content: space-between;
+        .config-value {
+            font-size: 32px;
+            font-weight: 900;
+            color: #00F2EA;
+            margin-bottom: 15px;
         }
         
         .team-grid {
@@ -413,339 +431,13 @@
             margin-bottom: 20px;
         }
         
-        .alert {
-            background: rgba(255,0,80,0.1);
-            border: 1px solid rgba(255,0,80,0.3);
-            border-radius: 12px;
-            padding: 15px 20px;
-            margin-bottom: 20px;
-            color: #FF0050;
-            font-size: 14px;
-        }
-        /* DASHBOARD MELHORADO */
-        .performance-card {
-            background: #000;
-            border: 1px solid #1a1a1a;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 15px;
-            transition: all 0.3s;
-        }
-        
-        .performance-card:hover {
-            border-color: #00F2EA;
-            transform: translateX(5px);
-        }
-        
-        .performance-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .performance-name {
-            font-size: 18px;
-            font-weight: 700;
-            text-transform: capitalize;
-        }
-        
-        .performance-badge {
-            background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
-            color: #000;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 700;
-        }
-        
-        .performance-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-        }
-        
-        .performance-stat {
-            text-align: center;
-        }
-        
-        .performance-stat-value {
-            font-size: 24px;
-            font-weight: 700;
-            color: #00F2EA;
-        }
-        
-        .performance-stat-label {
-            font-size: 11px;
-            color: #888;
-            margin-top: 5px;
-        }
-        
-        .performance-bar {
-            margin-top: 15px;
-        }
-        
-        .performance-bar-label {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            color: #888;
-            margin-bottom: 8px;
-        }
-        
-        .performance-bar-track {
-            width: 100%;
-            height: 8px;
-            background: #1a1a1a;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        
-        .performance-bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #00F2EA 0%, #FF0050 100%);
-            border-radius: 10px;
-            transition: width 0.5s;
-        }
-        
-        .top-product-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px;
-            background: #000;
-            border: 1px solid #1a1a1a;
-            border-radius: 10px;
-            margin-bottom: 12px;
-            transition: all 0.3s;
-        }
-        
-        .top-product-item:hover {
-            border-color: #00F2EA;
-            transform: translateX(5px);
-        }
-        
-        .top-product-rank {
-            width: 35px;
-            height: 35px;
-            background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
-            color: #000;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 900;
-            font-size: 16px;
-            flex-shrink: 0;
-        }
-        
-        .top-product-image {
-            width: 60px;
-            height: 60px;
-            border-radius: 8px;
-            object-fit: cover;
-            background: #1a1a1a;
-            flex-shrink: 0;
-        }
-        
-        .top-product-info {
-            flex: 1;
-        }
-        
-        .top-product-category {
-            font-size: 11px;
-            color: #888;
-            text-transform: uppercase;
-            margin-bottom: 3px;
-        }
-        
-        .top-product-obs {
-            font-size: 13px;
-            color: #FFF;
-            margin-bottom: 5px;
-        }
-        
-        .top-product-usage {
-            font-size: 12px;
-            color: #00F2EA;
-            font-weight: 600;
-        }
-        
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-        }
-        
-        .summary-item {
-            background: #000;
-            border: 1px solid #1a1a1a;
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-        }
-        
-        .summary-value {
-            font-size: 32px;
-            font-weight: 900;
-            background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 5px;
-        }
-        
-        .summary-label {
-            font-size: 12px;
-            color: #888;
-        }
-        
-        .activity-timeline {
-            position: relative;
-            padding-left: 30px;
-        }
-        
-        .activity-timeline::before {
-            content: '';
-            position: absolute;
-            left: 8px;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: #1a1a1a;
-        }
-        
-        .activity-item {
-            position: relative;
-            padding-bottom: 25px;
-        }
-        
-        .activity-item:last-child {
-            padding-bottom: 0;
-        }
-        
-        .activity-dot {
-            position: absolute;
-            left: -26px;
-            top: 5px;
-            width: 18px;
-            height: 18px;
-            background: #00F2EA;
-            border-radius: 50%;
-            border: 3px solid #000;
-            z-index: 1;
-        }
-        
-        .activity-content {
-            background: #000;
-            border: 1px solid #1a1a1a;
-            border-radius: 8px;
-            padding: 12px 15px;
-        }
-        
-        .activity-text {
-            font-size: 13px;
-            color: #FFF;
-            margin-bottom: 5px;
-        }
-        
-        .activity-time {
-            font-size: 11px;
-            color: #888;
-        }
-        
-        .goals-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-        
-        .goal-card {
-            background: #000;
-            border: 1px solid #1a1a1a;
-            border-radius: 12px;
-            padding: 25px;
-        }
-        
-        .goal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .goal-title {
-            font-size: 16px;
-            font-weight: 700;
-        }
-        
-        .goal-status {
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 700;
-        }
-        
-        .goal-status.completed {
-            background: rgba(0,242,234,0.2);
-            color: #00F2EA;
-        }
-        
-        .goal-status.in-progress {
-            background: rgba(255,0,80,0.2);
-            color: #FF0050;
-        }
-        
-        .goal-progress {
-            margin-top: 15px;
-        }
-        
-        .goal-progress-label {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            margin-bottom: 8px;
-        }
-        
-        .goal-progress-bar {
-            width: 100%;
-            height: 8px;
-            background: #1a1a1a;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        
-        .goal-progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #00F2EA 0%, #FF0050 100%);
-            border-radius: 10px;
-            transition: width 0.5s;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        @media (max-width: 1024px) {
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .summary-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        
         @media (max-width: 768px) {
             .header {
                 flex-direction: column;
                 gap: 15px;
             }
             
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .products-grid, .week-grid, .team-grid {
+            .stats-grid, .products-grid, .team-grid {
                 grid-template-columns: 1fr;
             }
             
@@ -756,66 +448,42 @@
     </style>
 </head>
 <body>
-    <!-- HEADER -->
     <div class="header">
         <div class="logo">TikTok Shop Manager</div>
         <button class="btn-logout" onclick="logout()">Sair</button>
     </div>
 
-    <!-- CONTAINER -->
     <div class="container">
-        <!-- TABS -->
         <div class="tabs">
             <div class="tab active" onclick="showTab('dashboard')">Dashboard</div>
+            <div class="tab" onclick="showTab('config')">Configurações</div>
             <div class="tab" onclick="showTab('products')">Produtos</div>
+            <div class="tab" onclick="showTab('categories')">Categorias</div>
             <div class="tab" onclick="showTab('distribution')">Distribuição</div>
             <div class="tab" onclick="showTab('team')">Equipe</div>
         </div>
 
-        <!-- TAB: DASHBOARD MELHORADO -->
+        <!-- TAB: DASHBOARD -->
         <div id="dashboard" class="tab-content active">
             <div class="stats-grid" id="statsGrid"></div>
             <div id="alerts"></div>
-            
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 30px;">
-                <div style="display: flex; flex-direction: column; gap: 30px;">
-                    <div class="section">
-                        <div class="section-header">
-                            <h2 class="section-title">Performance da Equipe</h2>
-                        </div>
-                        <div id="teamPerformance"></div>
-                    </div>
-                    
-                    <div class="section">
-                        <div class="section-header">
-                            <h2 class="section-title">Top 5 Produtos</h2>
-                        </div>
-                        <div id="topProducts"></div>
-                    </div>
-                </div>
-                
-                <div style="display: flex; flex-direction: column; gap: 30px;">
-                    <div class="section">
-                        <div class="section-header">
-                            <h2 class="section-title">Resumo Semanal</h2>
-                        </div>
-                        <div id="weekSummary"></div>
-                    </div>
-                    
-                    <div class="section">
-                        <div class="section-header">
-                            <h2 class="section-title">Atividades Recentes</h2>
-                        </div>
-                        <div id="recentActivity"></div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="section" style="margin-top: 30px;">
+        </div>
+
+        <!-- TAB: CONFIGURAÇÕES -->
+        <div id="config" class="tab-content">
+            <div class="section">
                 <div class="section-header">
-                    <h2 class="section-title">Metas da Semana</h2>
+                    <h2 class="section-title">Produtos por Dia</h2>
                 </div>
-                <div id="weeklyGoals"></div>
+                <div class="config-card">
+                    <div class="config-label">Quantidade Atual</div>
+                    <div class="config-value" id="currentProductsPerDay">6</div>
+                    <div class="form-group">
+                        <label class="form-label">Nova Quantidade (mínimo 6)</label>
+                        <input type="number" class="form-input" id="newProductsPerDay" min="6" value="6">
+                    </div>
+                    <button class="btn-primary" onclick="updateProductsPerDay()">Atualizar para Todos</button>
+                </div>
             </div>
         </div>
 
@@ -823,55 +491,86 @@
         <div id="products" class="tab-content">
             <div class="section">
                 <div class="section-header">
-                    <h2 class="section-title">Adicionar Produtos</h2>
-                </div>
-                
-                <div class="upload-zone" id="uploadZone">
-                    <div>📸 Toque para adicionar fotos</div>
-                    <input type="file" id="fileInput" accept="image/*" multiple style="display: none;">
+                    <h2 class="section-title">Adicionar Novo Produto</h2>
                 </div>
                 
                 <div class="form-group">
                     <label class="form-label">Categoria</label>
-                    <select class="form-select" id="category">
-                        <option value="campeoes">Produtos Campeões</option>
-                        <option value="roupas">Roupas</option>
-                        <option value="novos">Produtos Novos</option>
+                    <select class="form-select" id="productCategory" onchange="loadSubcategories()">
+                        <option value="">Selecione...</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" id="subcategoryGroup" style="display: none;">
+                    <label class="form-label">Subcategoria</label>
+                    <select class="form-select" id="productSubcategory">
+                        <option value="">Selecione...</option>
                     </select>
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">Observação (opcional)</label>
-                    <textarea class="form-textarea" id="observation"></textarea>
+                    <label class="form-label">Print do Produto</label>
+                    <div class="upload-zone" id="uploadZone1">
+                        <div class="upload-text">Clique para adicionar</div>
+                        <input type="file" id="productImage" accept="image/*" style="display: none;">
+                    </div>
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">Tags (opcional)</label>
-                    <input type="text" class="form-input" id="tags">
+                    <label class="form-label">Foto Referência</label>
+                    <div class="upload-zone" id="uploadZone2">
+                        <div class="upload-text">Clique para adicionar</div>
+                        <input type="file" id="referenceImage" accept="image/*" style="display: none;">
+                    </div>
                 </div>
                 
-                <button class="btn-primary" onclick="uploadProducts()">Adicionar Produtos</button>
+                <div class="form-group">
+                    <label class="form-label">Link do Vídeo</label>
+                    <input type="url" class="form-input" id="videoLink" placeholder="https://...">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Copy do Vídeo</label>
+                    <textarea class="form-textarea" id="copyText" placeholder="Digite a copy aqui..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Observação (opcional)</label>
+                    <input type="text" class="form-input" id="observation" placeholder="Ex: Produto em promoção">
+                </div>
+                
+                <button class="btn-primary" onclick="addProduct()">Adicionar Produto</button>
             </div>
             
             <div class="section">
                 <div class="section-header">
-                    <h2 class="section-title">Produtos Campeões (<span id="campeoesCount">0</span>)</h2>
+                    <h2 class="section-title">Filtrar Produtos</h2>
                 </div>
-                <div class="products-grid" id="campeoesGrid"></div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <select class="form-select" id="filterCategory" onchange="loadProducts()">
+                        <option value="">Todas as Categorias</option>
+                    </select>
+                    <select class="form-select" id="filterSubcategory" onchange="loadProducts()">
+                        <option value="">Todas as Subcategorias</option>
+                    </select>
+                </div>
             </div>
             
             <div class="section">
                 <div class="section-header">
-                    <h2 class="section-title">Roupas (<span id="roupasCount">0</span>)</h2>
+                    <h2 class="section-title">Produtos Cadastrados (<span id="productsCount">0</span>)</h2>
                 </div>
-                <div class="products-grid" id="roupasGrid"></div>
+                <div class="products-grid" id="productsGrid"></div>
             </div>
-            
+        </div>
+
+        <!-- TAB: CATEGORIAS -->
+        <div id="categories" class="tab-content">
             <div class="section">
                 <div class="section-header">
-                    <h2 class="section-title">Produtos Novos (<span id="novosCount">0</span>)</h2>
+                    <h2 class="section-title">Gerenciar Categorias</h2>
                 </div>
-                <div class="products-grid" id="novosGrid"></div>
+                <div id="categoriesGrid"></div>
             </div>
         </div>
 
@@ -879,7 +578,7 @@
         <div id="distribution" class="tab-content">
             <div class="section">
                 <div class="section-header">
-                    <h2 class="section-title">Gerar Nova Distribuição</h2>
+                    <h2 class="section-title">Gerar Distribuição</h2>
                 </div>
                 
                 <div class="form-group">
@@ -890,8 +589,8 @@
                 <div class="form-group">
                     <label class="form-label">Modo de Distribuição</label>
                     <select class="form-select" id="distributionMode">
+                        <option value="same">Produtos Iguais (Padrão)</option>
                         <option value="different">Produtos Diferentes</option>
-                        <option value="same">Produtos Iguais</option>
                     </select>
                 </div>
                 
@@ -900,10 +599,10 @@
             
             <div class="section" id="distributionPreview" style="display: none;">
                 <div class="section-header">
-                    <h2 class="section-title">Prévia da Distribuição</h2>
+                    <h2 class="section-title">Prévia</h2>
                     <button class="btn-primary" onclick="publishDistribution()">Publicar</button>
                 </div>
-                <div class="week-grid" id="weekGrid"></div>
+                <div id="distributionContent"></div>
             </div>
         </div>
 
@@ -923,532 +622,527 @@
     <div class="modal" id="addMemberModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Adicionar Membro</h3>
+                <h3 class="modal-title">Adicionar Membro</h3>
                 <button class="modal-close" onclick="closeModal('addMemberModal')">×</button>
             </div>
-            
             <div class="form-group">
                 <label class="form-label">Nome</label>
                 <input type="text" class="form-input" id="memberName">
             </div>
-            
-            <div class="form-group">
-                <label class="form-label">Produtos por dia</label>
-                <input type="number" class="form-input" id="memberProducts" value="9">
-            </div>
-            
             <button class="btn-primary" onclick="addMember()">Adicionar</button>
         </div>
     </div>
 
-    <!-- MODAL: EDITAR PRODUTO -->
-    <div class="modal" id="editProductModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Editar Produto</h3>
-                <button class="modal-close" onclick="closeModal('editProductModal')">×</button>
-            </div>
-            
-            <input type="hidden" id="editProductId">
-            
-            <div class="form-group">
-                <label class="form-label">Observação</label>
-                <textarea class="form-textarea" id="editObservation"></textarea>
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Tags</label>
-                <input type="text" class="form-input" id="editTags">
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Status</label>
-                <select class="form-select" id="editStatus">
-                    <option value="active">Ativo</option>
-                    <option value="paused">Pausado</option>
-                    <option value="archived">Arquivado</option>
-                </select>
-            </div>
-            
-            <button class="btn-primary" onclick="updateProduct()">Salvar</button>
-        </div>
-    </div>
-
     <script>
-        const API_URL = '/api';
-        let token = localStorage.getItem('token');
-        let currentDistributionId = null;
-        let selectedFiles = [];
-        
-        if (!token) window.location.href = '/';
-        
-        const headers = {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        };
-        
+        // ==================== CONFIGURAÇÃO ====================
+        const API_URL = window.location.origin;
+        let currentDistribution = null;
+
+        // ==================== AUTENTICAÇÃO ====================
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            const userType = localStorage.getItem('userType');
+            
+            if (!token || userType !== 'admin') {
+                window.location.href = '/login.html';
+                return false;
+            }
+            return true;
+        }
+
         function logout() {
             localStorage.clear();
-            window.location.href = '/';
+            window.location.href = '/login.html';
         }
-        
+
+        // ==================== NAVEGAÇÃO ====================
         function showTab(tabName) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             
             event.target.classList.add('active');
             document.getElementById(tabName).classList.add('active');
             
             if (tabName === 'dashboard') loadDashboard();
             if (tabName === 'products') loadProducts();
+            if (tabName === 'categories') loadCategories();
             if (tabName === 'team') loadTeam();
+            if (tabName === 'config') loadConfig();
         }
-        
-        const uploadZone = document.getElementById('uploadZone');
-        const fileInput = document.getElementById('fileInput');
-        
-        uploadZone.addEventListener('click', () => fileInput.click());
-        fileInput.addEventListener('change', (e) => {
-            selectedFiles = Array.from(e.target.files);
-            if (selectedFiles.length > 0) {
-                uploadZone.innerHTML = `<div>✓ ${selectedFiles.length} arquivo(s)</div>`;
-            }
-        });
-        
-        async function uploadProducts() {
-            if (selectedFiles.length === 0) {
-                alert('Selecione imagens');
-                return;
-            }
-            
-            const category = document.getElementById('category').value;
-            const observation = document.getElementById('observation').value;
-            const tags = document.getElementById('tags').value;
-            
-            for (const file of selectedFiles) {
-                const formData = new FormData();
-                formData.append('image', file);
-                formData.append('category', category);
-                formData.append('observation', observation);
-                formData.append('tags', tags);
-                
-                await fetch(`${API_URL}/products`, {
-                    method: 'POST',
-                    headers: { 'Authorization': `Bearer ${token}` },
-                    body: formData
-                });
-            }
-            
-            alert('Produtos adicionados!');
-            selectedFiles = [];
-            fileInput.value = '';
-            document.getElementById('observation').value = '';
-            document.getElementById('tags').value = '';
-            uploadZone.innerHTML = '<div>📸 Toque para adicionar fotos</div>';
-            loadProducts();
-            loadDashboard();
-        }
-        
+
+        // ==================== DASHBOARD ====================
         async function loadDashboard() {
             try {
-                const statsResponse = await fetch(`${API_URL}/products/stats`, { headers });
-                const statsData = await statsResponse.json();
-                const stats = statsData.stats;
-                
-                const teamResponse = await fetch(`${API_URL}/team`, { headers });
-                const teamData = await teamResponse.json();
-                
-                const productsResponse = await fetch(`${API_URL}/products`, { headers });
-                const productsData = await productsResponse.json();
+                const res = await fetch(`${API_URL}/api/dashboard`, {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                });
+                const data = await res.json();
                 
                 document.getElementById('statsGrid').innerHTML = `
                     <div class="stat-card">
                         <div class="stat-label">Total de Produtos</div>
-                        <div class="stat-value">${stats.total || 0}</div>
+                        <div class="stat-value">${data.stats.totalProducts}</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-label">Produtos Campeões</div>
-                        <div class="stat-value">${stats.campeoes || 0}</div>
+                        <div class="stat-label">Produtos Validados</div>
+                        <div class="stat-value">${data.stats.validatedProducts}</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-label">Roupas</div>
-                        <div class="stat-value">${stats.roupas || 0}</div>
+                        <div class="stat-label">Pendentes</div>
+                        <div class="stat-value">${data.stats.pendingProducts}</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-label">Produtos Novos</div>
-                        <div class="stat-value">${stats.novos || 0}</div>
+                        <div class="stat-label">Equipe Ativa</div>
+                        <div class="stat-value">${data.stats.activeMembers}</div>
                     </div>
                 `;
                 
-                renderAlerts(stats);
-                await renderTeamPerformance(teamData.members);
-                renderTopProducts(productsData.products);
-                renderWeekSummary(stats, teamData.members);
-                renderRecentActivity();
-                renderWeeklyGoals(teamData.members, stats);
-                
-            } catch (error) {
-                console.error('Erro ao carregar dashboard:', error);
-            }
-        }
-        
-        function renderAlerts(stats) {
-            let alerts = '';
-            if (stats.total === 0) {
-                alerts += '<div class="alert">⚠️ Nenhum produto cadastrado. Adicione produtos para começar!</div>';
-            } else {
-                if (stats.campeoes < 10) alerts += '<div class="alert">⚠️ Poucos produtos Campeões. Recomendado: mínimo 15.</div>';
-                if (stats.roupas < 10) alerts += '<div class="alert">⚠️ Poucos produtos Roupas. Recomendado: mínimo 15.</div>';
-                if (stats.novos < 10) alerts += '<div class="alert">⚠️ Poucos produtos Novos. Recomendado: mínimo 15.</div>';
-            }
-            if (!alerts && stats.total >= 30) {
-                alerts = '<div class="alert" style="background: rgba(0,242,234,0.1); border-color: rgba(0,242,234,0.3); color: #00F2EA;">✓ Sistema pronto!</div>';
-            }
-            document.getElementById('alerts').innerHTML = alerts;
-        }
-        
-        async function renderTeamPerformance(members) {
-            let html = '';
-            for (const member of members) {
-                try {
-                    const response = await fetch(`${API_URL}/team/${member.id}/stats`, { headers });
-                    const data = await response.json();
-                    const stats = data.stats;
-                    const completionRate = stats.totalVideos > 0 ? Math.round((stats.completed / stats.totalVideos) * 100) : 0;
-                    
-                    html += `
-                        <div class="performance-card">
-                            <div class="performance-header">
-                                <div class="performance-name">${member.name}</div>
-                                <div class="performance-badge">${member.products_per_day}/dia</div>
-                            </div>
-                            <div class="performance-stats">
-                                <div class="performance-stat">
-                                    <div class="performance-stat-value">${stats.totalVideos || 0}</div>
-                                    <div class="performance-stat-label">Total</div>
-                                </div>
-                                <div class="performance-stat">
-                                    <div class="performance-stat-value">${stats.completed || 0}</div>
-                                    <div class="performance-stat-label">Concluídos</div>
-                                </div>
-                                <div class="performance-stat">
-                                    <div class="performance-stat-value">${stats.pending || 0}</div>
-                                    <div class="performance-stat-label">Pendentes</div>
-                                </div>
-                            </div>
-                            <div class="performance-bar">
-                                <div class="performance-bar-label">
-                                    <span>Taxa de Conclusão</span>
-                                    <span>${completionRate}%</span>
-                                </div>
-                                <div class="performance-bar-track">
-                                    <div class="performance-bar-fill" style="width: ${completionRate}%"></div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                } catch (error) {
-                    console.error(`Erro ao carregar stats de ${member.name}:`, error);
+                if (data.alerts && data.alerts.length > 0) {
+                    document.getElementById('alerts').innerHTML = data.alerts.map(alert => 
+                        `<div class="alert">${alert}</div>`
+                    ).join('');
+                } else {
+                    document.getElementById('alerts').innerHTML = '';
                 }
+            } catch (err) {
+                console.error('Erro ao carregar dashboard:', err);
             }
-            if (!html) html = '<div style="text-align: center; color: #888; padding: 40px;">Nenhum dado disponível</div>';
-            document.getElementById('teamPerformance').innerHTML = html;
         }
-        
-        function renderTopProducts(products) {
-            const sorted = products.filter(p => p.times_used > 0).sort((a, b) => b.times_used - a.times_used).slice(0, 5);
-            if (sorted.length === 0) {
-                document.getElementById('topProducts').innerHTML = '<div style="text-align: center; color: #888; padding: 40px;">Nenhum produto usado ainda</div>';
+
+        // ==================== CONFIGURAÇÕES ====================
+        async function loadConfig() {
+            try {
+                const res = await fetch(`${API_URL}/api/distribution/config`, {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                });
+                const data = await res.json();
+                
+                document.getElementById('currentProductsPerDay').textContent = data.productsPerDay;
+                document.getElementById('newProductsPerDay').value = data.productsPerDay;
+            } catch (err) {
+                console.error('Erro ao carregar config:', err);
+            }
+        }
+
+        async function updateProductsPerDay() {
+            const newValue = parseInt(document.getElementById('newProductsPerDay').value);
+            
+            if (newValue < 6) {
+                alert('O valor mínimo é 6 produtos por dia');
                 return;
             }
-            const html = sorted.map((p, i) => `
-                <div class="top-product-item">
-                    <div class="top-product-rank">${i + 1}</div>
-                    <img src="${p.image_path}" class="top-product-image">
-                    <div class="top-product-info">
-                        <div class="top-product-category">${p.category}</div>
-                        <div class="top-product-obs">${p.observation || 'Sem observação'}</div>
-                        <div class="top-product-usage">Usado ${p.times_used}x</div>
-                    </div>
-                </div>
-            `).join('');
-            document.getElementById('topProducts').innerHTML = html;
+            
+            if (!confirm(`Atualizar para ${newValue} produtos por dia para TODOS os membros?`)) {
+                return;
+            }
+            
+            try {
+                const res = await fetch(`${API_URL}/api/distribution/config`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ productsPerDay: newValue })
+                });
+                
+                if (res.ok) {
+                    alert('Configuração atualizada com sucesso!');
+                    loadConfig();
+                } else {
+                    alert('Erro ao atualizar configuração');
+                }
+            } catch (err) {
+                console.error('Erro:', err);
+                alert('Erro ao atualizar configuração');
+            }
         }
-        
-        function renderWeekSummary(stats, members) {
-            const html = `
-                <div class="summary-grid">
-                    <div class="summary-item">
-                        <div class="summary-value">${members.length}</div>
-                        <div class="summary-label">Membros Ativos</div>
-                    </div>
-                    <div class="summary-item">
-                        <div class="summary-value">${stats.total}</div>
-                        <div class="summary-label">Produtos Cadastrados</div>
-                    </div>
-                    <div class="summary-item">
-                        <div class="summary-value">${members.length * 9 * 5}</div>
-                        <div class="summary-label">Vídeos/Semana</div>
-                    </div>
-                    <div class="summary-item">
-                        <div class="summary-value">${members.length * 9}</div>
-                        <div class="summary-label">Vídeos/Dia</div>
-                    </div>
-                </div>
-            `;
-            document.getElementById('weekSummary').innerHTML = html;
-        }
-        
-        function renderRecentActivity() {
-            const html = `
-                <div class="activity-timeline">
-                    <div class="activity-item">
-                        <div class="activity-dot"></div>
-                        <div class="activity-content">
-                            <div class="activity-text">Dashboard carregado</div>
-                            <div class="activity-time">Agora</div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            document.getElementById('recentActivity').innerHTML = html;
-        }
-        
-        function renderWeeklyGoals(members, stats) {
-            const totalNeeded = members.length * 9 * 5;
-            const hasEnough = stats.total >= totalNeeded;
-            const goals = [
-                { title: 'Produtos Suficientes', current: stats.total, target: totalNeeded, status: hasEnough ? 'completed' : 'in-progress' },
-                { title: 'Equipe Completa', current: members.length, target: members.length, status: 'completed' }
-            ];
-            const html = `
-                <div class="goals-grid">
-                    ${goals.map(g => {
-                        const percent = Math.min(100, Math.round((g.current / g.target) * 100));
-                        return `
-                            <div class="goal-card">
-                                <div class="goal-header">
-                                    <div class="goal-title">${g.title}</div>
-                                    <div class="goal-status ${g.status}">${g.status === 'completed' ? 'Completo' : 'Em Andamento'}</div>
-                                </div>
-                                <div class="goal-progress">
-                                    <div class="goal-progress-label">
-                                        <span>${g.current} / ${g.target}</span>
-                                        <span>${percent}%</span>
-                                    </div>
-                                    <div class="goal-progress-bar">
-                                        <div class="goal-progress-fill" style="width: ${percent}%"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                    }).join('')}
-                </div>
-            `;
-            document.getElementById('weeklyGoals').innerHTML = html;
-        }
-        
+
+        // ==================== PRODUTOS ====================
         async function loadProducts() {
-            const response = await fetch(`${API_URL}/products`, { headers });
-            const data = await response.json();
-            
-            const campeoes = data.products.filter(p => p.category === 'campeoes');
-            const roupas = data.products.filter(p => p.category === 'roupas');
-            const novos = data.products.filter(p => p.category === 'novos');
-            
-            document.getElementById('campeoesCount').textContent = campeoes.length;
-            document.getElementById('roupasCount').textContent = roupas.length;
-            document.getElementById('novosCount').textContent = novos.length;
-            
-            document.getElementById('campeoesGrid').innerHTML = campeoes.map(p => createProductCard(p)).join('');
-            document.getElementById('roupasGrid').innerHTML = roupas.map(p => createProductCard(p)).join('');
-            document.getElementById('novosGrid').innerHTML = novos.map(p => createProductCard(p)).join('');
-        }
-        
-        function createProductCard(product) {
-            return `
-                <div class="product-card">
-                    <img src="${product.image_path}" class="product-image" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%231a1a1a%22 width=%22200%22 height=%22200%22/%3E%3C/svg%3E'">
-                    <div class="product-info">
-                        <div class="product-obs">${product.observation || 'Sem observação'}</div>
-                        <div class="product-actions">
-                            <button class="btn-icon" onclick="editProduct(${product.id}, '${(product.observation || '').replace(/'/g, "\\'")}', '${product.tags || ''}', '${product.status}')">Editar</button>
-                            <button class="btn-icon delete" onclick="deleteProduct(${product.id})">Excluir</button>
+            try {
+                const category = document.getElementById('filterCategory')?.value || '';
+                const subcategory = document.getElementById('filterSubcategory')?.value || '';
+                
+                let url = `${API_URL}/api/products?`;
+                if (category) url += `category=${category}&`;
+                if (subcategory) url += `subcategory=${subcategory}&`;
+                
+                const res = await fetch(url, {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                });
+                const products = await res.json();
+                
+                document.getElementById('productsCount').textContent = products.length;
+                document.getElementById('productsGrid').innerHTML = products.map(p => `
+                    <div class="product-card">
+                        <img src="${p.imageUrl}" class="product-image" alt="${p.category}">
+                        <div class="product-info">
+                            <div class="product-category">${p.category}${p.subcategory ? ' > ' + p.subcategory : ''}</div>
+                            ${p.observation ? `<div style="font-size: 11px; color: #888; margin-top: 5px;">${p.observation}</div>` : ''}
+                            <div class="product-actions">
+                                ${!p.validated ? 
+                                    `<button class="btn-icon validate" onclick="validateProduct(${p.id})">Validar</button>` : 
+                                    `<button class="btn-icon" disabled>Validado</button>`
+                                }
+                                <button class="btn-icon delete" onclick="deleteProduct(${p.id})">Excluir</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            `;
+                `).join('');
+            } catch (err) {
+                console.error('Erro ao carregar produtos:', err);
+            }
         }
-        
-        function editProduct(id, obs, tags, status) {
-            document.getElementById('editProductId').value = id;
-            document.getElementById('editObservation').value = obs;
-            document.getElementById('editTags').value = tags;
-            document.getElementById('editStatus').value = status;
-            document.getElementById('editProductModal').classList.add('show');
-        }
-        
-        async function updateProduct() {
-            const id = document.getElementById('editProductId').value;
-            const observation = document.getElementById('editObservation').value;
-            const tags = document.getElementById('editTags').value;
-            const status = document.getElementById('editStatus').value;
+
+        async function addProduct() {
+            const category = document.getElementById('productCategory').value;
+            const subcategory = document.getElementById('productSubcategory').value;
+            const imageFile = document.getElementById('productImage').files[0];
+            const referenceFile = document.getElementById('referenceImage').files[0];
+            const videoLink = document.getElementById('videoLink').value;
+            const copyText = document.getElementById('copyText').value;
+            const observation = document.getElementById('observation').value;
             
-            await fetch(`${API_URL}/products/${id}`, {
-                method: 'PUT',
-                headers,
-                body: JSON.stringify({ observation, tags, status })
-            });
+            if (!category || !imageFile || !videoLink || !copyText) {
+                alert('Preencha todos os campos obrigatórios');
+                return;
+            }
             
-            closeModal('editProductModal');
-            loadProducts();
+            const formData = new FormData();
+            formData.append('category', category);
+            if (subcategory) formData.append('subcategory', subcategory);
+            formData.append('image', imageFile);
+            if (referenceFile) formData.append('reference', referenceFile);
+            formData.append('videoLink', videoLink);
+            formData.append('copyText', copyText);
+            if (observation) formData.append('observation', observation);
+            
+            try {
+                const res = await fetch(`${API_URL}/api/products`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+                    body: formData
+                });
+                
+                if (res.ok) {
+                    alert('Produto adicionado com sucesso!');
+                    document.getElementById('productCategory').value = '';
+                    document.getElementById('productSubcategory').value = '';
+                    document.getElementById('productImage').value = '';
+                    document.getElementById('referenceImage').value = '';
+                    document.getElementById('videoLink').value = '';
+                    document.getElementById('copyText').value = '';
+                    document.getElementById('observation').value = '';
+                    document.getElementById('subcategoryGroup').style.display = 'none';
+                    loadProducts();
+                } else {
+                    alert('Erro ao adicionar produto');
+                }
+            } catch (err) {
+                console.error('Erro:', err);
+                alert('Erro ao adicionar produto');
+            }
         }
-        
+
+        async function validateProduct(id) {
+            try {
+                const res = await fetch(`${API_URL}/api/products/${id}/validate`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                });
+                
+                if (res.ok) {
+                    alert('Produto validado!');
+                    loadProducts();
+                } else {
+                    alert('Erro ao validar produto');
+                }
+            } catch (err) {
+                console.error('Erro:', err);
+                alert('Erro ao validar produto');
+            }
+        }
+
         async function deleteProduct(id) {
-            if (!confirm('Excluir produto?')) return;
-            await fetch(`${API_URL}/products/${id}`, { method: 'DELETE', headers });
-            loadProducts();
-            loadDashboard();
+            if (!confirm('Deseja realmente excluir este produto?')) return;
+            
+            try {
+                const res = await fetch(`${API_URL}/api/products/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                });
+                
+                if (res.ok) {
+                    alert('Produto excluído!');
+                    loadProducts();
+                } else {
+                    alert('Erro ao excluir produto');
+                }
+            } catch (err) {
+                console.error('Erro:', err);
+                alert('Erro ao excluir produto');
+            }
         }
-        
+
+        // ==================== CATEGORIAS ====================
+        async function loadCategories() {
+            try {
+                const res = await fetch(`${API_URL}/api/products/categories`, {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                });
+                const categories = await res.json();
+                
+                // Atualizar select de categoria
+                const categorySelect = document.getElementById('productCategory');
+                const filterCategorySelect = document.getElementById('filterCategory');
+                
+                categorySelect.innerHTML = '<option value="">Selecione...</option>' + 
+                    Object.keys(categories).map(cat => `<option value="${cat}">${cat}</option>`).join('');
+                
+                filterCategorySelect.innerHTML = '<option value="">Todas as Categorias</option>' +
+                    Object.keys(categories).map(cat => `<option value="${cat}">${cat}</option>`).join('');
+                
+                // Grid de categorias
+                document.getElementById('categoriesGrid').innerHTML = Object.entries(categories).map(([cat, subs]) => `
+                    <div class="config-card">
+                        <div style="font-size: 16px; font-weight: 700; margin-bottom: 10px;">${cat}</div>
+                        <div style="font-size: 12px; color: #888;">
+                            ${subs.length > 0 ? subs.join(', ') : 'Sem subcategorias'}
+                        </div>
+                    </div>
+                `).join('');
+            } catch (err) {
+                console.error('Erro ao carregar categorias:', err);
+            }
+        }
+
+        async function loadSubcategories() {
+            const category = document.getElementById('productCategory').value;
+            const subcategoryGroup = document.getElementById('subcategoryGroup');
+            const subcategorySelect = document.getElementById('productSubcategory');
+            
+            if (!category) {
+                subcategoryGroup.style.display = 'none';
+                return;
+            }
+            
+            try {
+                const res = await fetch(`${API_URL}/api/products/categories`, {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                });
+                const categories = await res.json();
+                
+                const subs = categories[category] || [];
+                
+                if (subs.length > 0) {
+                    subcategoryGroup.style.display = 'block';
+                    subcategorySelect.innerHTML = '<option value="">Selecione...</option>' +
+                        subs.map(sub => `<option value="${sub}">${sub}</option>`).join('');
+                } else {
+                    subcategoryGroup.style.display = 'none';
+                }
+            } catch (err) {
+                console.error('Erro:', err);
+            }
+        }
+
+        // ==================== DISTRIBUIÇÃO ====================
         async function generateDistribution() {
             const weekStart = document.getElementById('weekStart').value;
             const mode = document.getElementById('distributionMode').value;
             
             if (!weekStart) {
-                alert('Selecione a data');
+                alert('Selecione a data de início da semana');
                 return;
             }
             
-            const response = await fetch(`${API_URL}/distribution/generate`, {
-                method: 'POST',
-                headers,
-                body: JSON.stringify({ week_start: weekStart, distribution_mode: mode })
-            });
-            
-            const data = await response.json();
-            if (!data.success) {
-                alert(data.message || 'Erro ao gerar distribuição');
-                return;
+            try {
+                const res = await fetch(`${API_URL}/api/distribution/generate`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ weekStart, mode })
+                });
+                
+                if (res.ok) {
+                    currentDistribution = await res.json();
+                    displayDistributionPreview(currentDistribution);
+                } else {
+                    const error = await res.json();
+                    alert(error.error || 'Erro ao gerar distribuição');
+                }
+            } catch (err) {
+                console.error('Erro:', err);
+                alert('Erro ao gerar distribuição');
             }
-            
-            currentDistributionId = data.distribution_id;
-            displayDistribution(data.distribution);
         }
-        
-        function displayDistribution(dist) {
-            const dates = Object.keys(dist);
-            const html = dates.map(date => {
-                const dayData = dist[date];
-                const members = Object.keys(dayData);
-                return `
-                    <div class="day-card">
-                        <div class="day-header">${formatDate(date)}</div>
-                        ${members.map(memberId => {
-                            const member = dayData[memberId];
-                            const total = member.products.campeoes.length + member.products.roupas.length + member.products.novos.length;
-                            return `
-                                <div class="person-section">
-                                    <div class="person-name">${member.memberName}</div>
-                                    <div class="product-mini"><span>Total</span><span>${total}</span></div>
-                                </div>
-                            `;
-                        }).join('')}
-                    </div>
-                `;
-            }).join('');
-            document.getElementById('weekGrid').innerHTML = html;
-            document.getElementById('distributionPreview').style.display = 'block';
-        }
-        
-        async function publishDistribution() {
-            if (!currentDistributionId) return;
-            if (!confirm('Publicar distribuição?')) return;
+
+        function displayDistributionPreview(distribution) {
+            const preview = document.getElementById('distributionPreview');
+            const content = document.getElementById('distributionContent');
             
-            await fetch(`${API_URL}/distribution/publish/${currentDistributionId}`, { method: 'POST', headers });
-            alert('Distribuição publicada!');
-            document.getElementById('distributionPreview').style.display = 'none';
-            document.getElementById('weekStart').value = '';
-        }
-        
-        async function loadTeam() {
-            const response = await fetch(`${API_URL}/team`, { headers });
-            const data = await response.json();
+            const days = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'];
             
-            document.getElementById('teamGrid').innerHTML = data.members.map(m => `
-                <div class="team-card">
-                    <div class="team-avatar">${m.name.charAt(0).toUpperCase()}</div>
-                    <div class="team-name">${m.name}</div>
-                    <div class="team-stats">${m.products_per_day} produtos/dia</div>
-                    <button class="btn-secondary" onclick="deleteMember(${m.id})">Remover</button>
+            content.innerHTML = Object.entries(distribution.distribution).map(([member, schedule]) => `
+                <div class="config-card">
+                    <div style="font-size: 18px; font-weight: 700; margin-bottom: 15px; text-transform: capitalize;">${member}</div>
+                    ${days.map((day, i) => `
+                        <div style="margin-bottom: 10px;">
+                            <div style="font-size: 12px; color: #888; margin-bottom: 5px;">${day}</div>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 5px;">
+                                ${schedule[day].map(p => `
+                                    <img src="${p.imageUrl}" style="width: 100%; height: 60px; object-fit: cover; border-radius: 8px;">
+                                `).join('')}
+                            </div>
+                        </div>
+                    `).join('')}
                 </div>
             `).join('');
+            
+            preview.style.display = 'block';
         }
-        
-        function showAddMemberModal() {
-            document.getElementById('memberName').value = '';
-            document.getElementById('memberProducts').value = '9';
-            document.getElementById('addMemberModal').classList.add('show');
-        }
-        
-        async function addMember() {
-            const name = document.getElementById('memberName').value;
-            const products = document.getElementById('memberProducts').value;
-            if (!name) {
-                alert('Digite o nome');
+
+        async function publishDistribution() {
+            if (!currentDistribution) {
+                alert('Gere a distribuição primeiro');
                 return;
             }
-            await fetch(`${API_URL}/team`, {
-                method: 'POST',
-                headers,
-                body: JSON.stringify({ name, products_per_day: parseInt(products) })
-            });
-            closeModal('addMemberModal');
-            loadTeam();
-            alert(`Membro ${name} adicionado! Acesse: ${window.location.origin}/${name}`);
-        }
-        
-        async function deleteMember(id) {
-            if (!confirm('Remover membro?')) return;
+            
+            if (!confirm('Confirma a publicação desta distribuição?')) return;
+            
             try {
-                await fetch(`${API_URL}/team/${id}`, { method: 'DELETE', headers });
-                loadTeam();
-            } catch (error) {
-                alert('Erro ao remover.');
-            }
-        }
-        
-        function closeModal(id) {
-            document.getElementById(id).classList.remove('show');
-        }
-        
-        function formatDate(dateStr) {
-            const date = new Date(dateStr + 'T00:00:00');
-            const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
-            return `${days[date.getDay()]} - ${date.getDate()}/${date.getMonth() + 1}`;
-        }
-        
-        async function init() {
-            try {
-                const response = await fetch(`${API_URL}/auth/verify`, { headers });
-                const data = await response.json();
-                if (!data.success) {
-                    localStorage.clear();
-                    window.location.href = '/';
-                    return;
+                const res = await fetch(`${API_URL}/api/distribution/publish`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(currentDistribution)
+                });
+                
+                if (res.ok) {
+                    alert('Distribuição publicada com sucesso!');
+                    document.getElementById('distributionPreview').style.display = 'none';
+                    currentDistribution = null;
+                } else {
+                    alert('Erro ao publicar distribuição');
                 }
-                await loadDashboard();
-            } catch (error) {
-                console.error('Erro:', error);
-                localStorage.clear();
-                window.location.href = '/';
+            } catch (err) {
+                console.error('Erro:', err);
+                alert('Erro ao publicar distribuição');
             }
         }
-        
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', init);
-        } else {
-            init();
+
+        // ==================== EQUIPE ====================
+        async function loadTeam() {
+            try {
+                const res = await fetch(`${API_URL}/api/team`, {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                });
+                const members = await res.json();
+                
+                document.getElementById('teamGrid').innerHTML = members.map(m => `
+                    <div class="team-card">
+                        <div class="team-avatar">${m.name.charAt(0).toUpperCase()}</div>
+                        <div class="team-name">${m.name}</div>
+                        <div class="team-stats">Membro ativo</div>
+                        <button class="btn-secondary" onclick="removeMember(${m.id})">Remover</button>
+                    </div>
+                `).join('');
+            } catch (err) {
+                console.error('Erro ao carregar equipe:', err);
+            }
+        }
+
+        function showAddMemberModal() {
+            document.getElementById('addMemberModal').classList.add('show');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        async function addMember() {
+            const name = document.getElementById('memberName').value.trim();
+            
+            if (!name) {
+                alert('Digite o nome do membro');
+                return;
+            }
+            
+            try {
+                const res = await fetch(`${API_URL}/api/team`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name })
+                });
+                
+                if (res.ok) {
+                    alert('Membro adicionado com sucesso!');
+                    document.getElementById('memberName').value = '';
+                    closeModal('addMemberModal');
+                    loadTeam();
+                } else {
+                    alert('Erro ao adicionar membro');
+                }
+            } catch (err) {
+                console.error('Erro:', err);
+                alert('Erro ao adicionar membro');
+            }
+        }
+
+        async function removeMember(id) {
+            if (!confirm('Deseja realmente remover este membro?')) return;
+            
+            try {
+                const res = await fetch(`${API_URL}/api/team/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                });
+                
+                if (res.ok) {
+                    alert('Membro removido!');
+                    loadTeam();
+                } else {
+                    alert('Erro ao remover membro');
+                }
+            } catch (err) {
+                console.error('Erro:', err);
+                alert('Erro ao remover membro');
+            }
+        }
+
+        // ==================== UPLOAD DE IMAGENS ====================
+        document.getElementById('uploadZone1').addEventListener('click', () => {
+            document.getElementById('productImage').click();
+        });
+
+        document.getElementById('uploadZone2').addEventListener('click', () => {
+            document.getElementById('referenceImage').click();
+        });
+
+        document.getElementById('productImage').addEventListener('change', (e) => {
+            if (e.target.files[0]) {
+                document.querySelector('#uploadZone1 .upload-text').textContent = e.target.files[0].name;
+            }
+        });
+
+        document.getElementById('referenceImage').addEventListener('change', (e) => {
+            if (e.target.files[0]) {
+                document.querySelector('#uploadZone2 .upload-text').textContent = e.target.files[0].name;
+            }
+        });
+
+        // ==================== INICIALIZAÇÃO ====================
+        if (checkAuth()) {
+            loadDashboard();
+            loadCategories();
         }
     </script>
 </body>
