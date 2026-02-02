@@ -34,20 +34,15 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(cookieParser());
 
-// ✅ IMPORTANTE: Servir arquivos estáticos ANTES das rotas API
-app.use(express.static('public'));
-
-// ✅ Rota Dashboard
+// Dashboard API
 app.get('/api/dashboard', authMiddleware, (req, res) => {
   try {
     const totalProducts = db.prepare('SELECT COUNT(*) as count FROM products WHERE status = ?').get('active').count;
-    
     const validatedProducts = db.prepare(`
       SELECT COUNT(*) as count FROM products p
       JOIN categories c ON p.category_id = c.id
       WHERE c.slug = 'validados' AND p.status = 'active'
     `).get().count;
-    
     const activeMembers = db.prepare('SELECT COUNT(*) as count FROM team_members WHERE active = 1').get().count;
 
     res.json({
@@ -66,7 +61,7 @@ app.get('/api/dashboard', authMiddleware, (req, res) => {
   }
 });
 
-// Rotas da API
+// API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/team', teamRoutes);
@@ -74,34 +69,21 @@ app.use('/api/distribution', distributionRoutes);
 app.use('/api/public', publicRoutes);
 app.use('/api/categories', categoryRoutes);
 
-// ✅ CORRIGIDO - Rota raiz
+// Static files DEPOIS das APIs
+app.use(express.static('public'));
+
+// ROTAS EXATAS (vem antes)
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'login.html'));
+  res.redirect('/login.html');
 });
 
-// ✅ CRÍTICO - Esta rota deve vir ANTES da rota /:username
-// Se não, o Express vai tratar "admin.html" como um username!
-app.get('/admin.html', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
-});
-
-app.get('/login.html', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'login.html'));
-});
-
-app.get('/employee.html', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'employee.html'));
-});
-
-// ✅ Rota dinâmica de funcionários (DEVE VIR POR ÚLTIMO)
-app.get('/:username', (req, res) => {
+// ROTA DINÂMICA (vem depois) - APENAS para usernames SEM .html
+app.get('/:username([a-z0-9]+)', (req, res) => {
   try {
     const username = req.params.username.toLowerCase();
     
-    // ✅ IMPORTANTE - Bloquear palavras reservadas
-    const blockedPaths = ['api', 'admin', 'login', 'employee', 'admin.html', 'login.html', 'employee.html', 'uploads', 'public'];
-    
-    if (blockedPaths.includes(username)) {
+    // Bloquear palavras reservadas
+    if (['api', 'admin', 'login', 'employee', 'uploads'].includes(username)) {
       return res.status(404).send('Página não encontrada');
     }
     
@@ -154,7 +136,17 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 Servidor rodando na porta ${PORT}`);
-  console.log(`📱 Acesse: http://localhost:${PORT}`);
-  console.log(`👤 Admin: http://localhost:${PORT}/admin.html`);
+  console.log(`
+  
+🚀 ===================================
+   SERVIDOR RODANDO COM SUCESSO!
+   ===================================
+   
+   URL: http://localhost:${PORT}
+   
+   ADMIN:  http://localhost:${PORT}/admin.html
+   LOGIN:  http://localhost:${PORT}/login.html
+   
+   ===================================
+  `);
 });
