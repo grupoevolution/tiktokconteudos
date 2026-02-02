@@ -634,3 +634,641 @@
     </div>
 
     <script>
+const API_URL = window.location.origin;
+let currentDistribution = null;
+
+// ============= AUTENTICAÇÃO =============
+async function checkAuth() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        window.location.href = '/login.html';
+        return;
+    }
+    
+    try {
+        const response = await fetch(`${API_URL}/api/auth/verify`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        if (!response.ok) {
+            localStorage.removeItem('token');
+            window.location.href = '/login.html';
+        }
+    } catch (error) {
+        console.error('Erro ao verificar token:', error);
+        localStorage.removeItem('token');
+        window.location.href = '/login.html';
+    }
+}
+
+function logout() {
+    localStorage.removeItem('token');
+    window.location.href = '/login.html';
+}
+
+// ============= TABS =============
+function showTab(tabName) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    
+    document.querySelector(`.tab[onclick="showTab('${tabName}')"]`).classList.add('active');
+    document.getElementById(tabName).classList.add('active');
+    
+    if (tabName === 'dashboard') loadDashboard();
+    if (tabName === 'products') loadProducts();
+    if (tabName === 'categories') loadCategories();
+    if (tabName === 'team') loadTeam();
+    if (tabName === 'config') loadConfig();
+}
+
+// ============= DASHBOARD =============
+async function loadDashboard() {
+    try {
+        const token = localStorage.getItem('token');
+        
+        const [productsRes, teamRes] = await Promise.all([
+            fetch(`${API_URL}/api/products/stats`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            }),
+            fetch(`${API_URL}/api/team`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            })
+        ]);
+        
+        const productsData = await productsRes.json();
+        const teamData = await teamRes.json();
+        
+        const stats = productsData.stats;
+        const members = teamData.members;
+        
+        document.getElementById('statsGrid').innerHTML = `
+            <div class="stat-card">
+                <div class="stat-label">Total de Produtos</div>
+                <div class="stat-value">${stats.total}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Produtos Validados</div>
+                <div class="stat-value">${stats.validados}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Roupas</div>
+                <div class="stat-value">${stats.roupas}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Roupas Música</div>
+                <div class="stat-value">${stats.roupas_musica}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Novos Produtos</div>
+                <div class="stat-value">${stats.novos}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Membros Ativos</div>
+                <div class="stat-value">${members.filter(m => m.active).length}</div>
+            </div>
+        `;
+        
+        let alerts = '';
+        if (stats.validados < 30) alerts += '<div class="alert">⚠️ Poucos produtos validados cadastrados</div>';
+        if (stats.novos < 50) alerts += '<div class="alert">⚠️ Poucos novos produtos cadastrados</div>';
+        if (members.filter(m => m.active).length === 0) alerts += '<div class="alert">⚠️ Nenhum membro ativo</div>';
+        
+        document.getElementById('alerts').innerHTML = alerts;
+        
+    } catch (error) {
+        console.error('Erro ao carregar dashboard:', error);
+    }
+}
+
+// ============= CONFIGURAÇÕES =============
+async function loadConfig() {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_URL}/api/team`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        const data = await response.json();
+        const members = data.members;
+        
+        if (members.length > 0) {
+            document.getElementById('currentProductsPerDay').textContent = members[0].products_per_day;
+            document.getElementById('newProductsPerDay').value = members[0].products_per_day;
+        }
+    } catch (error) {
+        console.error('Erro ao carregar config:', error);
+    }
+}
+
+async function updateProductsPerDay() {
+    try {
+        const newValue = parseInt(document.getElementById('newProductsPerDay').value);
+        
+        if (newValue < 6) {
+            alert('Mínimo de 6 produtos por dia');
+            return;
+        }
+        
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_URL}/api/team/all/products-per-day`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ products_per_day: newValue })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            alert('✅ Atualizado para todos os membros!');
+            loadConfig();
+        } else {
+            alert('❌ Erro ao atualizar');
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        alert('❌ Erro ao atualizar');
+    }
+}
+
+// ============= PRODUTOS =============
+async function loadProducts() {
+    try {
+        const token = localStorage.getItem('token');
+        
+        const categoryId = document.getElementById('filterCategory').value;
+        const subcategoryId = document.getElementById('filterSubcategory').value;
+        
+        let url = `${API_URL}/api/products?status=active`;
+        if (categoryId) url += `&category_id=${categoryId}`;
+        if (subcategoryId) url += `&subcategory_id=${subcategoryId}`;
+        
+        const response = await fetch(url, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        const data = await response.json();
+        const products = data.products;
+        
+        document.getElementById('productsCount').textContent = products.length;
+        
+        if (products.length === 0) {
+            document.getElementById('productsGrid').innerHTML = '<p style="text-align: center; color: #888;">Nenhum produto encontrado</p>';
+            return;
+        }
+        
+        document.getElementById('productsGrid').innerHTML = products.map(p => `
+            <div class="product-card">
+                <img src="${p.product_image}" class="product-image" alt="Produto">
+                <div class="product-info">
+                    <div class="product-category">${p.category_name}${p.subcategory_name ? ' > ' + p.subcategory_name : ''}</div>
+                    <div class="product-actions">
+                        ${p.category_slug !== 'validados' ? `<button class="btn-icon validate" onclick="validateProduct(${p.id})">Validar</button>` : ''}
+                        <button class="btn-icon delete" onclick="deleteProduct(${p.id})">Deletar</button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+        
+    } catch (error) {
+        console.error('Erro ao carregar produtos:', error);
+    }
+}
+
+async function loadCategoriesForProducts() {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_URL}/api/categories`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        const data = await response.json();
+        const categories = data.categories;
+        
+        const categorySelect = document.getElementById('productCategory');
+        const filterCategorySelect = document.getElementById('filterCategory');
+        
+        categorySelect.innerHTML = '<option value="">Selecione...</option>' +
+            categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+        
+        filterCategorySelect.innerHTML = '<option value="">Todas as Categorias</option>' +
+            categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+        
+    } catch (error) {
+        console.error('Erro ao carregar categorias:', error);
+    }
+}
+
+async function loadSubcategories() {
+    try {
+        const categoryId = document.getElementById('productCategory').value;
+        
+        if (!categoryId) {
+            document.getElementById('subcategoryGroup').style.display = 'none';
+            return;
+        }
+        
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_URL}/api/categories`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        const data = await response.json();
+        const category = data.categories.find(c => c.id == categoryId);
+        
+        if (category && category.subcategories && category.subcategories.length > 0) {
+            document.getElementById('subcategoryGroup').style.display = 'block';
+            document.getElementById('productSubcategory').innerHTML = '<option value="">Selecione...</option>' +
+                category.subcategories.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+        } else {
+            document.getElementById('subcategoryGroup').style.display = 'none';
+        }
+        
+    } catch (error) {
+        console.error('Erro ao carregar subcategorias:', error);
+    }
+}
+
+document.getElementById('uploadZone1').addEventListener('click', () => {
+    document.getElementById('productImage').click();
+});
+
+document.getElementById('uploadZone2').addEventListener('click', () => {
+    document.getElementById('referenceImage').click();
+});
+
+document.getElementById('productImage').addEventListener('change', (e) => {
+    if (e.target.files[0]) {
+        document.querySelector('#uploadZone1 .upload-text').textContent = e.target.files[0].name;
+    }
+});
+
+document.getElementById('referenceImage').addEventListener('change', (e) => {
+    if (e.target.files[0]) {
+        document.querySelector('#uploadZone2 .upload-text').textContent = e.target.files[0].name;
+    }
+});
+
+async function addProduct() {
+    try {
+        const categoryId = document.getElementById('productCategory').value;
+        const subcategoryId = document.getElementById('productSubcategory').value;
+        const productImage = document.getElementById('productImage').files[0];
+        const referenceImage = document.getElementById('referenceImage').files[0];
+        const videoLink = document.getElementById('videoLink').value;
+        const copyText = document.getElementById('copyText').value;
+        const observation = document.getElementById('observation').value;
+        
+        if (!categoryId || !productImage || !referenceImage || !videoLink || !copyText) {
+            alert('Preencha todos os campos obrigatórios');
+            return;
+        }
+        
+        const formData = new FormData();
+        formData.append('category_id', categoryId);
+        if (subcategoryId) formData.append('subcategory_id', subcategoryId);
+        formData.append('product_image', productImage);
+        formData.append('reference_image', referenceImage);
+        formData.append('video_link', videoLink);
+        formData.append('copy_text', copyText);
+        if (observation) formData.append('observation', observation);
+        
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_URL}/api/products`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}` },
+            body: formData
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            alert('✅ Produto adicionado com sucesso!');
+            
+            document.getElementById('productCategory').value = '';
+            document.getElementById('productSubcategory').value = '';
+            document.getElementById('productImage').value = '';
+            document.getElementById('referenceImage').value = '';
+            document.getElementById('videoLink').value = '';
+            document.getElementById('copyText').value = '';
+            document.getElementById('observation').value = '';
+            document.querySelector('#uploadZone1 .upload-text').textContent = 'Clique para adicionar';
+            document.querySelector('#uploadZone2 .upload-text').textContent = 'Clique para adicionar';
+            document.getElementById('subcategoryGroup').style.display = 'none';
+            
+            loadProducts();
+        } else {
+            alert('❌ Erro ao adicionar produto');
+        }
+    } catch (error) {
+        console.error('Erro ao adicionar produto:', error);
+        alert('❌ Erro ao adicionar produto');
+    }
+}
+
+async function validateProduct(productId) {
+    if (!confirm('Mover este produto para Validados?')) return;
+    
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_URL}/api/products/${productId}/validate`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            alert('✅ Produto movido para Validados!');
+            loadProducts();
+        } else {
+            alert('❌ Erro ao validar produto');
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        alert('❌ Erro ao validar produto');
+    }
+}
+
+async function deleteProduct(productId) {
+    if (!confirm('Tem certeza que deseja deletar este produto?')) return;
+    
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_URL}/api/products/${productId}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            alert('✅ Produto deletado!');
+            loadProducts();
+        } else {
+            alert('❌ Erro ao deletar produto');
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        alert('❌ Erro ao deletar produto');
+    }
+}
+
+// ============= CATEGORIAS =============
+async function loadCategories() {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_URL}/api/categories`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        const data = await response.json();
+        const categories = data.categories;
+        
+        document.getElementById('categoriesGrid').innerHTML = categories.map(cat => `
+            <div class="config-card">
+                <div class="config-label">${cat.name}</div>
+                <div style="margin-top: 10px;">
+                    ${cat.subcategories.map(sub => `
+                        <div style="padding: 8px; background: #000; border-radius: 8px; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center;">
+                            <span style="color: #888; font-size: 13px;">${sub.name}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `).join('');
+        
+    } catch (error) {
+        console.error('Erro ao carregar categorias:', error);
+    }
+}
+
+// ============= DISTRIBUIÇÃO =============
+async function generateDistribution() {
+    try {
+        const weekStart = document.getElementById('weekStart').value;
+        const distributionMode = document.getElementById('distributionMode').value;
+        
+        if (!weekStart) {
+            alert('Selecione a data de início');
+            return;
+        }
+        
+        const selectedDate = new Date(weekStart + 'T00:00:00');
+        if (selectedDate.getDay() !== 1) {
+            alert('Selecione uma segunda-feira');
+            return;
+        }
+        
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_URL}/api/distribution/generate`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                week_start: weekStart,
+                distribution_mode: distributionMode
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            currentDistribution = {
+                id: data.distribution_id,
+                data: data.distribution
+            };
+            
+            displayDistributionPreview(data.distribution);
+        } else {
+            alert('❌ ' + (data.message || 'Erro ao gerar distribuição'));
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        alert('❌ Erro ao gerar distribuição');
+    }
+}
+
+function displayDistributionPreview(distribution) {
+    const dates = Object.keys(distribution);
+    const members = Object.keys(distribution[dates[0]]);
+    
+    let html = '<div style="overflow-x: auto;">';
+    
+    dates.forEach(date => {
+        const dateObj = new Date(date + 'T00:00:00');
+        const dayName = dateObj.toLocaleDateString('pt-BR', { weekday: 'long' });
+        
+        html += `
+            <div style="margin-bottom: 30px;">
+                <h3 style="margin-bottom: 15px; color: #00F2EA;">${dayName.toUpperCase()} - ${dateObj.toLocaleDateString('pt-BR')}</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+        `;
+        
+        members.forEach(memberId => {
+            const memberData = distribution[date][memberId];
+            const allProducts = [
+                ...memberData.products.validados,
+                ...memberData.products.roupas,
+                ...memberData.products.roupas_musica,
+                ...memberData.products.novos
+            ];
+            
+            html += `
+                <div style="background: #000; border: 1px solid #1a1a1a; border-radius: 10px; padding: 15px;">
+                    <div style="font-weight: 700; margin-bottom: 10px; text-transform: capitalize;">${memberData.memberName}</div>
+                    <div style="font-size: 12px; color: #888; margin-bottom: 10px;">
+                        ${allProducts.length} produtos
+                    </div>
+                    <div style="font-size: 11px; color: #666;">
+                        ${memberData.products.validados.length}V | 
+                        ${memberData.products.roupas.length}R | 
+                        ${memberData.products.roupas_musica.length}M | 
+                        ${memberData.products.novos.length}N
+                    </div>
+                </div>
+            `;
+        });
+        
+        html += '</div></div>';
+    });
+    
+    html += '</div>';
+    
+    document.getElementById('distributionContent').innerHTML = html;
+    document.getElementById('distributionPreview').style.display = 'block';
+}
+
+async function publishDistribution() {
+    if (!currentDistribution) return;
+    
+    if (!confirm('Publicar esta distribuição? Todos os funcionários receberão os produtos.')) return;
+    
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_URL}/api/distribution/publish/${currentDistribution.id}`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            alert('✅ Distribuição publicada com sucesso!');
+            document.getElementById('distributionPreview').style.display = 'none';
+            document.getElementById('weekStart').value = '';
+            currentDistribution = null;
+        } else {
+            alert('❌ Erro ao publicar distribuição');
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        alert('❌ Erro ao publicar distribuição');
+    }
+}
+
+// ============= EQUIPE =============
+async function loadTeam() {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_URL}/api/team`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        const data = await response.json();
+        const members = data.members;
+        
+        document.getElementById('teamGrid').innerHTML = members.map(m => `
+            <div class="team-card">
+                <div class="team-avatar">${m.name.charAt(0).toUpperCase()}</div>
+                <div class="team-name">${m.name}</div>
+                <div class="team-stats">${m.products_per_day} produtos/dia</div>
+                <button class="btn-secondary" onclick="deleteMember(${m.id})">Remover</button>
+            </div>
+        `).join('');
+        
+    } catch (error) {
+        console.error('Erro ao carregar equipe:', error);
+    }
+}
+
+function showAddMemberModal() {
+    document.getElementById('addMemberModal').classList.add('show');
+    document.getElementById('memberName').value = '';
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).classList.remove('show');
+}
+
+async function addMember() {
+    try {
+        const name = document.getElementById('memberName').value.trim();
+        
+        if (!name) {
+            alert('Digite o nome do membro');
+            return;
+        }
+        
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_URL}/api/team`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name, products_per_day: 6 })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            alert('✅ Membro adicionado com sucesso!');
+            closeModal('addMemberModal');
+            loadTeam();
+        } else {
+            alert('❌ ' + (data.error || 'Erro ao adicionar membro'));
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        alert('❌ Erro ao adicionar membro');
+    }
+}
+
+async function deleteMember(memberId) {
+    if (!confirm('Tem certeza que deseja remover este membro?')) return;
+    
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_URL}/api/team/${memberId}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            alert('✅ Membro removido!');
+            loadTeam();
+        } else {
+            alert('❌ ' + (data.error || 'Erro ao remover membro'));
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        alert('❌ Erro ao remover membro');
+    }
+}
+
+// ============= INICIALIZAÇÃO =============
+window.addEventListener('DOMContentLoaded', () => {
+    checkAuth();
+    loadDashboard();
+    loadCategoriesForProducts();
+});
+    </script>
+</body>
+</html>
