@@ -131,7 +131,7 @@
     <script>
         const API_URL = window.location.origin;
         
-        // IMPORTANTE: Verificar se já está logado ao carregar a página
+        // Verificar se já está logado ao carregar a página
         window.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('token');
             const userType = localStorage.getItem('userType');
@@ -139,7 +139,7 @@
             // Se já tem token válido, redireciona
             if (token && userType) {
                 if (userType === 'admin') {
-                    window.location.replace('/admin.html');
+                    window.location.replace('/admin.html'); // ✅ CORRIGIDO
                 } else {
                     window.location.replace('/employee.html');
                 }
@@ -191,7 +191,7 @@
                         localStorage.setItem('userName', data.userName);
                     }
                     
-                    // Redirecionar baseado no tipo de usuário
+                    // ✅ CORRIGIDO - Redirecionar para /admin.html
                     if (data.userType === 'admin') {
                         window.location.replace('/admin.html');
                     } else {
