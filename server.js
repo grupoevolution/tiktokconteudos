@@ -9,6 +9,7 @@ const fs = require('fs');
 
 const db = require('./src/database/database');
 const authRoutes = require('./src/routes/authRoutes');
+const { authMiddleware } = require('./src/routes/authRoutes'); // ✅ ADICIONADO
 const productRoutes = require('./src/routes/productRoutes');
 const teamRoutes = require('./src/routes/teamRoutes');
 const distributionRoutes = require('./src/routes/distributionRoutes');
@@ -34,6 +35,35 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(cookieParser());
 
 app.use(express.static('public'));
+
+// ✅ ADICIONADO - Rota Dashboard
+app.get('/api/dashboard', authMiddleware, (req, res) => {
+  try {
+    const totalProducts = db.prepare('SELECT COUNT(*) as count FROM products WHERE status = ?').get('active').count;
+    
+    const validatedProducts = db.prepare(`
+      SELECT COUNT(*) as count FROM products p
+      JOIN categories c ON p.category_id = c.id
+      WHERE c.slug = 'validados' AND p.status = 'active'
+    `).get().count;
+    
+    const activeMembers = db.prepare('SELECT COUNT(*) as count FROM team_members WHERE active = 1').get().count;
+
+    res.json({
+      success: true,
+      stats: {
+        totalProducts: totalProducts || 0,
+        validatedProducts: validatedProducts || 0,
+        pendingProducts: (totalProducts - validatedProducts) || 0,
+        activeMembers: activeMembers || 0
+      },
+      alerts: []
+    });
+  } catch (error) {
+    console.error('Erro no dashboard:', error);
+    res.status(500).json({ error: 'Erro ao carregar dashboard' });
+  }
+});
 
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
