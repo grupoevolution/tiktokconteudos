@@ -16,20 +16,22 @@ router.get('/employee/:name/today', (req, res) => {
       return res.status(404).json({ error: 'Funcionário não encontrado' });
     }
 
-    // Buscar produtos do dia
+    // Buscar produtos do dia com informações de categoria
     const employeeProducts = db.prepare(`
-      SELECT ep.*, p.*
+      SELECT ep.*, p.*, c.slug as category_slug
       FROM employee_products ep
       JOIN products p ON ep.product_id = p.id
+      JOIN categories c ON p.category_id = c.id
       WHERE ep.member_id = ? AND ep.date = ?
-      ORDER BY p.category, p.id
+      ORDER BY c.slug, p.id
     `).all(member.id, today);
 
-    // Agrupar por categoria
+    // ✅ CORRIGIDO - Agrupar por categorias corretas
     const products = {
-      campeoes: employeeProducts.filter(p => p.category === 'campeoes'),
-      roupas: employeeProducts.filter(p => p.category === 'roupas'),
-      novos: employeeProducts.filter(p => p.category === 'novos')
+      validados: employeeProducts.filter(p => p.category_slug === 'validados'),
+      roupas: employeeProducts.filter(p => p.category_slug === 'roupas'),
+      roupas_musica: employeeProducts.filter(p => p.category_slug === 'roupas-musica'),
+      novos: employeeProducts.filter(p => p.category_slug === 'novos')
     };
 
     const stats = {
@@ -119,13 +121,14 @@ router.get('/employee/:name/history', (req, res) => {
     const daysLimit = parseInt(days) || 30;
     
     const history = db.prepare(`
-      SELECT ep.*, p.*
+      SELECT ep.*, p.*, c.slug as category_slug
       FROM employee_products ep
       JOIN products p ON ep.product_id = p.id
+      JOIN categories c ON p.category_id = c.id
       WHERE ep.member_id = ?
       ORDER BY ep.date DESC
       LIMIT ?
-    `).all(member.id, daysLimit * 9);
+    `).all(member.id, daysLimit * member.products_per_day);
 
     res.json({ success: true, history });
   } catch (error) {
