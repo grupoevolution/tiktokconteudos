@@ -9,7 +9,6 @@ const fs = require('fs');
 
 const db = require('./src/database/database');
 const authRoutes = require('./src/routes/authRoutes');
-const { authMiddleware } = require('./src/routes/authRoutes');
 const productRoutes = require('./src/routes/productRoutes');
 const teamRoutes = require('./src/routes/teamRoutes');
 const distributionRoutes = require('./src/routes/distributionRoutes');
@@ -34,34 +33,8 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(cookieParser());
 
-// Dashboard API
-app.get('/api/dashboard', authMiddleware, (req, res) => {
-  try {
-    const totalProducts = db.prepare('SELECT COUNT(*) as count FROM products WHERE status = ?').get('active').count;
-    const validatedProducts = db.prepare(`
-      SELECT COUNT(*) as count FROM products p
-      JOIN categories c ON p.category_id = c.id
-      WHERE c.slug = 'validados' AND p.status = 'active'
-    `).get().count;
-    const activeMembers = db.prepare('SELECT COUNT(*) as count FROM team_members WHERE active = 1').get().count;
+app.use(express.static('public'));
 
-    res.json({
-      success: true,
-      stats: {
-        totalProducts: totalProducts || 0,
-        validatedProducts: validatedProducts || 0,
-        pendingProducts: (totalProducts - validatedProducts) || 0,
-        activeMembers: activeMembers || 0
-      },
-      alerts: []
-    });
-  } catch (error) {
-    console.error('Erro no dashboard:', error);
-    res.status(500).json({ error: 'Erro ao carregar dashboard' });
-  }
-});
-
-// API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/team', teamRoutes);
@@ -69,21 +42,19 @@ app.use('/api/distribution', distributionRoutes);
 app.use('/api/public', publicRoutes);
 app.use('/api/categories', categoryRoutes);
 
-// Static files DEPOIS das APIs
-app.use(express.static('public'));
-
-// ROTAS EXATAS (vem antes)
 app.get('/', (req, res) => {
-  res.redirect('/login.html');
+  res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
 
-// ROTA DINÂMICA (vem depois) - APENAS para usernames SEM .html
-app.get('/:username([a-z0-9]+)', (req, res) => {
+app.get('/admin', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+});
+
+app.get('/:username', (req, res) => {
   try {
     const username = req.params.username.toLowerCase();
     
-    // Bloquear palavras reservadas
-    if (['api', 'admin', 'login', 'employee', 'uploads'].includes(username)) {
+    if (username === 'api' || username === 'admin') {
       return res.status(404).send('Página não encontrada');
     }
     
@@ -136,17 +107,6 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`
-  
-🚀 ===================================
-   SERVIDOR RODANDO COM SUCESSO!
-   ===================================
-   
-   URL: http://localhost:${PORT}
-   
-   ADMIN:  http://localhost:${PORT}/admin.html
-   LOGIN:  http://localhost:${PORT}/login.html
-   
-   ===================================
-  `);
+  console.log(`🚀 Servidor rodando na porta ${PORT}`);
+  console.log(`📱 Acesse: http://localhost:${PORT}`);
 });
