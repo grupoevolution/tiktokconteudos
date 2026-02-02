@@ -14,6 +14,7 @@ const teamRoutes = require('./src/routes/teamRoutes');
 const distributionRoutes = require('./src/routes/distributionRoutes');
 const publicRoutes = require('./src/routes/publicRoutes');
 const categoryRoutes = require('./src/routes/categoryRoutes');
+const backupRoutes = require('./src/routes/backupRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -41,6 +42,7 @@ app.use('/api/team', teamRoutes);
 app.use('/api/distribution', distributionRoutes);
 app.use('/api/public', publicRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('/api/backup', backupRoutes);
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'login.html'));
