@@ -7,7 +7,7 @@ const { authMiddleware } = require('./authRoutes');
 
 const router = express.Router();
 
-// Configurar multer para upload de imagens
+// Configurar multer para upload de 2 imagens
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const uploadsDir = path.join(__dirname, '../../public/uploads');
@@ -24,7 +24,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
+  limits: { fileSize: 10 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     const allowedTypes = /jpeg|jpg|png|gif|webp/;
     const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
@@ -40,26 +40,38 @@ const upload = multer({
 // Listar todos os produtos
 router.get('/', authMiddleware, (req, res) => {
   try {
-    const { category, status, search } = req.query;
-    let query = 'SELECT * FROM products WHERE 1=1';
+    const { category_id, subcategory_id, status, search } = req.query;
+    let query = `
+      SELECT p.*, c.name as category_name, c.slug as category_slug, 
+             s.name as subcategory_name 
+      FROM products p
+      LEFT JOIN categories c ON p.category_id = c.id
+      LEFT JOIN subcategories s ON p.subcategory_id = s.id
+      WHERE 1=1
+    `;
     const params = [];
 
-    if (category) {
-      query += ' AND category = ?';
-      params.push(category);
+    if (category_id) {
+      query += ' AND p.category_id = ?';
+      params.push(category_id);
+    }
+
+    if (subcategory_id) {
+      query += ' AND p.subcategory_id = ?';
+      params.push(subcategory_id);
     }
 
     if (status) {
-      query += ' AND status = ?';
+      query += ' AND p.status = ?';
       params.push(status);
     }
 
     if (search) {
-      query += ' AND (observation LIKE ? OR tags LIKE ?)';
-      params.push(`%${search}%`, `%${search}%`);
+      query += ' AND (p.observation LIKE ? OR p.copy_text LIKE ? OR p.tags LIKE ?)';
+      params.push(`%${search}%`, `%${search}%`, `%${search}%`);
     }
 
-    query += ' ORDER BY created_at DESC';
+    query += ' ORDER BY p.created_at DESC';
 
     const products = db.prepare(query).all(...params);
     res.json({ success: true, products });
@@ -69,30 +81,45 @@ router.get('/', authMiddleware, (req, res) => {
   }
 });
 
-// Adicionar produto
-router.post('/', authMiddleware, upload.single('image'), (req, res) => {
+// Adicionar produto (2 imagens + link + copy)
+router.post('/', authMiddleware, upload.fields([
+  { name: 'product_image', maxCount: 1 },
+  { name: 'reference_image', maxCount: 1 }
+]), (req, res) => {
   try {
-    const { category, observation, tags } = req.body;
+    const { category_id, subcategory_id, video_link, copy_text, observation, tags } = req.body;
     
-    if (!category || !req.file) {
-      return res.status(400).json({ error: 'Categoria e imagem são obrigatórios' });
+    if (!category_id || !req.files.product_image || !req.files.reference_image || !video_link || !copy_text) {
+      return res.status(400).json({ error: 'Todos os campos são obrigatórios: categoria, 2 imagens, link e copy' });
     }
 
-    const imagePath = '/uploads/' + req.file.filename;
+    const productImagePath = '/uploads/' + req.files.product_image[0].filename;
+    const referenceImagePath = '/uploads/' + req.files.reference_image[0].filename;
 
     const result = db.prepare(`
-      INSERT INTO products (category, image_path, observation, tags, status)
-      VALUES (?, ?, ?, ?, 'active')
-    `).run(category, imagePath, observation || '', tags || '');
+      INSERT INTO products (category_id, subcategory_id, product_image, reference_image, video_link, copy_text, observation, tags, status)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'active')
+    `).run(
+      category_id, 
+      subcategory_id || null, 
+      productImagePath, 
+      referenceImagePath, 
+      video_link, 
+      copy_text, 
+      observation || '', 
+      tags || ''
+    );
 
     res.json({
       success: true,
       product: {
         id: result.lastInsertRowid,
-        category,
-        image_path: imagePath,
-        observation,
-        tags
+        category_id,
+        subcategory_id,
+        product_image: productImagePath,
+        reference_image: referenceImagePath,
+        video_link,
+        copy_text
       }
     });
   } catch (error) {
@@ -105,13 +132,19 @@ router.post('/', authMiddleware, upload.single('image'), (req, res) => {
 router.put('/:id', authMiddleware, (req, res) => {
   try {
     const { id } = req.params;
-    const { observation, tags, status } = req.body;
+    const { video_link, copy_text, observation, tags, status, category_id, subcategory_id } = req.body;
 
     db.prepare(`
       UPDATE products
-      SET observation = ?, tags = ?, status = ?
+      SET video_link = COALESCE(?, video_link),
+          copy_text = COALESCE(?, copy_text),
+          observation = COALESCE(?, observation),
+          tags = COALESCE(?, tags),
+          status = COALESCE(?, status),
+          category_id = COALESCE(?, category_id),
+          subcategory_id = COALESCE(?, subcategory_id)
       WHERE id = ?
-    `).run(observation || '', tags || '', status || 'active', id);
+    `).run(video_link, copy_text, observation, tags, status, category_id, subcategory_id, id);
 
     res.json({ success: true });
   } catch (error) {
@@ -120,22 +153,44 @@ router.put('/:id', authMiddleware, (req, res) => {
   }
 });
 
+// Mover produto para Validados
+router.post('/:id/validate', authMiddleware, (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // Buscar categoria "Produtos Validados"
+    const validadosCategory = db.prepare('SELECT id FROM categories WHERE slug = ?').get('validados');
+    
+    if (!validadosCategory) {
+      return res.status(400).json({ error: 'Categoria "Produtos Validados" não encontrada' });
+    }
+    
+    // Mover produto
+    db.prepare('UPDATE products SET category_id = ? WHERE id = ?').run(validadosCategory.id, id);
+
+    res.json({ success: true, message: 'Produto movido para Validados' });
+  } catch (error) {
+    console.error('Erro ao validar produto:', error);
+    res.status(500).json({ error: 'Erro ao validar produto' });
+  }
+});
+
 // Deletar produto
 router.delete('/:id', authMiddleware, (req, res) => {
   try {
     const { id } = req.params;
     
-    // Buscar caminho da imagem
-    const product = db.prepare('SELECT image_path FROM products WHERE id = ?').get(id);
+    const product = db.prepare('SELECT product_image, reference_image FROM products WHERE id = ?').get(id);
     
     if (product) {
-      // Deletar arquivo físico
-      const filePath = path.join(__dirname, '../../public', product.image_path);
-      if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
-      }
+      // Deletar imagens físicas
+      [product.product_image, product.reference_image].forEach(imagePath => {
+        const filePath = path.join(__dirname, '../../public', imagePath);
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath);
+        }
+      });
       
-      // Deletar do banco
       db.prepare('DELETE FROM products WHERE id = ?').run(id);
     }
 
@@ -146,46 +201,48 @@ router.delete('/:id', authMiddleware, (req, res) => {
   }
 });
 
-// Obter estatísticas - CORRIGIDO
+// Obter estatísticas
 router.get('/stats', authMiddleware, (req, res) => {
   try {
-    console.log('Buscando estatísticas de produtos...');
+    const total = db.prepare('SELECT COUNT(*) as count FROM products WHERE status = ?').get('active').count;
     
-    // Contar produtos sem filtrar por status (caso a coluna não exista)
-    let total, campeoes, roupas, novos;
+    const validados = db.prepare(`
+      SELECT COUNT(*) as count FROM products p
+      JOIN categories c ON p.category_id = c.id
+      WHERE c.slug = 'validados' AND p.status = 'active'
+    `).get().count;
     
-    try {
-      // Tentar com a coluna status
-      total = db.prepare('SELECT COUNT(*) as count FROM products WHERE status = ?').get('active').count;
-      campeoes = db.prepare('SELECT COUNT(*) as count FROM products WHERE category = ? AND status = ?').get('campeoes', 'active').count;
-      roupas = db.prepare('SELECT COUNT(*) as count FROM products WHERE category = ? AND status = ?').get('roupas', 'active').count;
-      novos = db.prepare('SELECT COUNT(*) as count FROM products WHERE category = ? AND status = ?').get('novos', 'active').count;
-    } catch (error) {
-      // Se der erro, buscar sem filtro de status
-      console.log('Coluna status não existe, buscando todos os produtos');
-      total = db.prepare('SELECT COUNT(*) as count FROM products').get().count;
-      campeoes = db.prepare('SELECT COUNT(*) as count FROM products WHERE category = ?').get('campeoes').count;
-      roupas = db.prepare('SELECT COUNT(*) as count FROM products WHERE category = ?').get('roupas').count;
-      novos = db.prepare('SELECT COUNT(*) as count FROM products WHERE category = ?').get('novos').count;
-    }
-
-    console.log('Estatísticas:', { total, campeoes, roupas, novos });
+    const roupas = db.prepare(`
+      SELECT COUNT(*) as count FROM products p
+      JOIN categories c ON p.category_id = c.id
+      WHERE c.slug = 'roupas' AND p.status = 'active'
+    `).get().count;
+    
+    const roupasMusica = db.prepare(`
+      SELECT COUNT(*) as count FROM products p
+      JOIN categories c ON p.category_id = c.id
+      WHERE c.slug = 'roupas-musica' AND p.status = 'active'
+    `).get().count;
+    
+    const novos = db.prepare(`
+      SELECT COUNT(*) as count FROM products p
+      JOIN categories c ON p.category_id = c.id
+      WHERE c.slug = 'novos' AND p.status = 'active'
+    `).get().count;
 
     res.json({
       success: true,
       stats: { 
-        total: total || 0, 
-        campeoes: campeoes || 0, 
-        roupas: roupas || 0, 
-        novos: novos || 0 
+        total: total || 0,
+        validados: validados || 0,
+        roupas: roupas || 0,
+        roupas_musica: roupasMusica || 0,
+        novos: novos || 0
       }
     });
   } catch (error) {
     console.error('Erro ao obter estatísticas:', error);
-    res.status(500).json({ 
-      error: 'Erro ao obter estatísticas',
-      message: error.message 
-    });
+    res.status(500).json({ error: 'Erro ao obter estatísticas' });
   }
 });
 
