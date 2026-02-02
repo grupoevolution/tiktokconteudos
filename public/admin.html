@@ -461,6 +461,7 @@
             <div class="tab" onclick="showTab('categories')">Categorias</div>
             <div class="tab" onclick="showTab('distribution')">Distribuição</div>
             <div class="tab" onclick="showTab('team')">Equipe</div>
+            <div class="tab" onclick="showTab('backup')">Backup</div>
         </div>
 
         <!-- TAB: DASHBOARD -->
@@ -614,6 +615,42 @@
                     <button class="btn-primary" onclick="showAddMemberModal()">+ Adicionar</button>
                 </div>
                 <div class="team-grid" id="teamGrid"></div>
+            </div>
+        </div>
+
+        <!-- TAB: BACKUP -->
+        <div id="backup" class="tab-content">
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Exportar Backup</h2>
+                </div>
+                <p style="color: #888; margin-bottom: 20px; font-size: 14px;">
+                    Faça backup de todos os seus produtos, categorias e configurações. 
+                    Use este arquivo para restaurar seus dados após um deploy.
+                </p>
+                <button class="btn-primary" onclick="exportBackup()">
+                    Baixar Backup Completo
+                </button>
+            </div>
+            
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Importar Backup</h2>
+                </div>
+                <p style="color: #888; margin-bottom: 20px; font-size: 14px;">
+                    ⚠️ ATENÇÃO: Esta ação irá substituir TODOS os dados atuais pelos dados do backup.
+                </p>
+                
+                <div class="form-group">
+                    <label class="form-label">Selecione o arquivo de backup (.json)</label>
+                    <input type="file" id="backupFile" accept=".json" class="form-input" style="padding: 10px;">
+                </div>
+                
+                <button class="btn-primary" onclick="importBackup()">
+                    Importar Backup
+                </button>
+                
+                <div id="importStatus" style="margin-top: 20px;"></div>
             </div>
         </div>
     </div>
@@ -1260,6 +1297,93 @@ async function deleteMember(memberId) {
     } catch (error) {
         console.error('Erro:', error);
         alert('❌ Erro ao remover membro');
+    }
+}
+
+// ============= BACKUP =============
+async function exportBackup() {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_URL}/api/backup/export`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        if (!response.ok) {
+            throw new Error('Erro ao exportar backup');
+        }
+        
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `backup-tiktok-shop-${Date.now()}.json`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        
+        alert('✅ Backup exportado com sucesso!');
+    } catch (error) {
+        console.error('Erro ao exportar backup:', error);
+        alert('❌ Erro ao exportar backup');
+    }
+}
+
+async function importBackup() {
+    const fileInput = document.getElementById('backupFile');
+    const file = fileInput.files[0];
+    
+    if (!file) {
+        alert('Selecione um arquivo de backup');
+        return;
+    }
+    
+    if (!confirm('⚠️ ATENÇÃO: Todos os dados atuais serão SUBSTITUÍDOS pelo backup. Deseja continuar?')) {
+        return;
+    }
+    
+    try {
+        const fileContent = await file.text();
+        const backupData = JSON.parse(fileContent);
+        
+        if (!backupData.data || !backupData.data.products) {
+            alert('❌ Arquivo de backup inválido');
+            return;
+        }
+        
+        document.getElementById('importStatus').innerHTML = '<div class="alert">Importando backup... aguarde...</div>';
+        
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_URL}/api/backup/import`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(backupData)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            document.getElementById('importStatus').innerHTML = `
+                <div class="alert success">
+                    ✅ Backup importado com sucesso!<br>
+                    • ${result.stats.categories} categorias<br>
+                    • ${result.stats.products} produtos<br>
+                    • ${result.stats.team_members} membros
+                </div>
+            `;
+            
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
+        } else {
+            document.getElementById('importStatus').innerHTML = `<div class="alert">❌ ${result.error}</div>`;
+        }
+    } catch (error) {
+        console.error('Erro ao importar backup:', error);
+        document.getElementById('importStatus').innerHTML = `<div class="alert">❌ Erro ao processar arquivo: ${error.message}</div>`;
     }
 }
 
