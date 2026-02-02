@@ -111,6 +111,11 @@
             box-shadow: 0 15px 40px rgba(0,242,234,0.2);
         }
         
+        .product-card.completed {
+            opacity: 0.6;
+            border-color: #00F2EA;
+        }
+        
         .product-image-wrapper {
             position: relative;
             width: 100%;
@@ -146,6 +151,69 @@
             padding: 20px;
         }
         
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .checkbox-wrapper {
+            position: relative;
+            width: 24px;
+            height: 24px;
+        }
+        
+        .checkbox-input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+        }
+        
+        .checkbox-custom {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 24px;
+            height: 24px;
+            background: #000;
+            border: 2px solid #2a2a2a;
+            border-radius: 6px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .checkbox-input:checked ~ .checkbox-custom {
+            background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
+            border-color: transparent;
+        }
+        
+        .checkbox-custom::after {
+            content: "✓";
+            color: #000;
+            font-size: 16px;
+            font-weight: 900;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .checkbox-input:checked ~ .checkbox-custom::after {
+            opacity: 1;
+        }
+        
+        .checkbox-label {
+            font-size: 13px;
+            color: #888;
+            font-weight: 600;
+        }
+        
         .btn-ver-mais {
             width: 100%;
             background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
@@ -164,78 +232,37 @@
             transform: scale(1.02);
         }
         
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.95);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
+        .product-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+        
+        .product-details.expanded {
+            max-height: 2000px;
+        }
+        
+        .details-content {
             padding: 20px;
-            overflow-y: auto;
+            padding-top: 0;
         }
         
-        .modal.show {
-            display: flex;
+        .detail-section {
+            margin-bottom: 20px;
         }
         
-        .modal-content {
-            background: #0a0a0a;
-            border: 1px solid #1a1a1a;
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 600px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-        
-        .modal-title {
-            font-size: 20px;
-            font-weight: 700;
-        }
-        
-        .modal-close {
-            background: none;
-            border: none;
-            color: #888;
-            font-size: 28px;
-            cursor: pointer;
-            padding: 0;
-            width: 35px;
-            height: 35px;
-        }
-        
-        .modal-close:hover {
-            color: #FF0050;
-        }
-        
-        .modal-section {
-            margin-bottom: 25px;
-        }
-        
-        .modal-section-title {
-            font-size: 14px;
+        .detail-title {
+            font-size: 12px;
             color: #888;
             margin-bottom: 10px;
             font-weight: 600;
+            text-transform: uppercase;
         }
         
-        .modal-image {
+        .detail-image {
             width: 100%;
             border-radius: 12px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
         
         .btn-download {
@@ -243,12 +270,13 @@
             background: #1a1a1a;
             color: #00F2EA;
             border: 1px solid #2a2a2a;
-            padding: 12px;
-            border-radius: 10px;
+            padding: 10px;
+            border-radius: 8px;
             font-weight: 700;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 12px;
             transition: all 0.3s;
+            margin-bottom: 10px;
         }
         
         .btn-download:hover {
@@ -261,11 +289,11 @@
             background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
             color: #000;
             border: none;
-            padding: 12px;
-            border-radius: 10px;
+            padding: 10px;
+            border-radius: 8px;
             font-weight: 700;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 12px;
             transition: all 0.3s;
             text-decoration: none;
             display: block;
@@ -284,7 +312,7 @@
             color: #FFF;
             font-size: 13px;
             line-height: 1.6;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             max-height: 200px;
             overflow-y: auto;
         }
@@ -294,11 +322,11 @@
             background: #1a1a1a;
             color: #FFF;
             border: 1px solid #2a2a2a;
-            padding: 12px;
-            border-radius: 10px;
+            padding: 10px;
+            border-radius: 8px;
             font-weight: 700;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 12px;
             transition: all 0.3s;
         }
         
@@ -329,10 +357,6 @@
             .user-name {
                 font-size: 22px;
             }
-            
-            .modal-content {
-                padding: 20px;
-            }
         }
     </style>
 </head>
@@ -350,43 +374,10 @@
         <div class="products-grid" id="productsGrid"></div>
     </div>
 
-    <!-- MODAL VER MAIS -->
-    <div class="modal" id="productModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title">Detalhes do Produto</div>
-                <button class="modal-close" onclick="closeModal()">×</button>
-            </div>
-            
-            <div class="modal-section">
-                <div class="modal-section-title">Print do Produto</div>
-                <img id="modalProductImage" class="modal-image">
-                <button class="btn-download" onclick="downloadImage('product')">Baixar Foto do Produto</button>
-            </div>
-            
-            <div class="modal-section">
-                <div class="modal-section-title">Foto Referência</div>
-                <img id="modalReferenceImage" class="modal-image">
-                <button class="btn-download" onclick="downloadImage('reference')">Baixar Foto Referência</button>
-            </div>
-            
-            <div class="modal-section">
-                <div class="modal-section-title">Vídeo Referência</div>
-                <a id="modalVideoLink" class="btn-link" target="_blank">Abrir Vídeo Referência</a>
-            </div>
-            
-            <div class="modal-section">
-                <div class="modal-section-title">Copy do Vídeo</div>
-                <div class="copy-box" id="modalCopyText"></div>
-                <button class="btn-copy" onclick="copyCopy()">Copiar Copy</button>
-            </div>
-        </div>
-    </div>
-
     <script>
         const username = window.location.pathname.substring(1);
-        let currentProduct = null;
         let allProducts = [];
+        let expandedIndex = null;
         
         async function loadProducts() {
             try {
@@ -407,18 +398,11 @@
                     day: 'numeric' 
                 });
                 
+                // Apenas mostrar total de produtos
                 document.getElementById('statsBar').innerHTML = `
                     <div class="stat-item">
                         <div class="stat-number">${data.stats.total}</div>
                         <div class="stat-label">Produtos Hoje</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">${data.stats.downloaded}</div>
-                        <div class="stat-label">Baixados</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">${data.stats.total - data.stats.completed}</div>
-                        <div class="stat-label">Pendentes</div>
                     </div>
                 `;
                 
@@ -436,17 +420,8 @@
                 
                 document.getElementById('totalCount').textContent = allProducts.length;
                 
-                document.getElementById('productsGrid').innerHTML = allProducts.map((p, index) => `
-                    <div class="product-card">
-                        <div class="product-image-wrapper">
-                            <div class="product-number">${index + 1}</div>
-                            <img src="${p.product_image}" class="product-image" alt="Produto ${index + 1}">
-                        </div>
-                        <div class="product-info">
-                            <button class="btn-ver-mais" onclick="openModal(${index})">Ver Mais</button>
-                        </div>
-                    </div>
-                `).join('');
+                renderProducts();
+                loadCompletedState();
                 
             } catch (error) {
                 console.error('Erro:', error);
@@ -454,41 +429,160 @@
             }
         }
         
-        function openModal(index) {
-            currentProduct = allProducts[index];
-            
-            document.getElementById('modalProductImage').src = currentProduct.product_image;
-            document.getElementById('modalReferenceImage').src = currentProduct.reference_image;
-            document.getElementById('modalVideoLink').href = currentProduct.video_link;
-            document.getElementById('modalCopyText').textContent = currentProduct.copy_text;
-            
-            document.getElementById('productModal').classList.add('show');
-            
-            markAsDownloaded(currentProduct.product_id);
+        function renderProducts() {
+            document.getElementById('productsGrid').innerHTML = allProducts.map((p, index) => `
+                <div class="product-card" id="card-${index}" data-completed="false">
+                    <div class="product-image-wrapper">
+                        <div class="product-number">${index + 1}</div>
+                        <img src="${p.product_image}" class="product-image" alt="Produto ${index + 1}">
+                    </div>
+                    <div class="product-info">
+                        <label class="checkbox-container" onclick="toggleCompleted(${index}, event)">
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="checkbox-input" id="checkbox-${index}">
+                                <div class="checkbox-custom"></div>
+                            </div>
+                            <span class="checkbox-label">Marcar como produzido</span>
+                        </label>
+                        
+                        <button class="btn-ver-mais" onclick="toggleProduct(${index})">
+                            <span id="btn-text-${index}">Ver Mais</span>
+                        </button>
+                        
+                        <div class="product-details" id="details-${index}">
+                            <div class="details-content">
+                                <div class="detail-section">
+                                    <div class="detail-title">Print do Produto</div>
+                                    <img src="${p.product_image}" class="detail-image" alt="Produto">
+                                    <button class="btn-download" onclick="downloadImage('${p.product_image}', 'produto-${index + 1}')">Baixar Foto do Produto</button>
+                                </div>
+                                
+                                <div class="detail-section">
+                                    <div class="detail-title">Foto Referência</div>
+                                    <img src="${p.reference_image}" class="detail-image" alt="Referência">
+                                    <button class="btn-download" onclick="downloadImage('${p.reference_image}', 'referencia-${index + 1}')">Baixar Foto Referência</button>
+                                </div>
+                                
+                                <div class="detail-section">
+                                    <div class="detail-title">Vídeo Referência</div>
+                                    <a href="${p.video_link}" class="btn-link" target="_blank">Abrir Vídeo Referência</a>
+                                </div>
+                                
+                                <div class="detail-section">
+                                    <div class="detail-title">Copy do Vídeo</div>
+                                    <div class="copy-box">${p.copy_text}</div>
+                                    <button class="btn-copy" onclick="copyCopy(${index}, '${p.copy_text.replace(/'/g, "\\'")}')">Copiar Copy</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
         }
         
-        function closeModal() {
-            document.getElementById('productModal').classList.remove('show');
-            currentProduct = null;
+        function toggleProduct(index) {
+            const details = document.getElementById(`details-${index}`);
+            const btnText = document.getElementById(`btn-text-${index}`);
+            
+            // Se já está expandido, colapsa
+            if (expandedIndex === index) {
+                details.classList.remove('expanded');
+                btnText.textContent = 'Ver Mais';
+                expandedIndex = null;
+            } else {
+                // Fecha o anterior se houver
+                if (expandedIndex !== null) {
+                    const prevDetails = document.getElementById(`details-${expandedIndex}`);
+                    const prevBtnText = document.getElementById(`btn-text-${expandedIndex}`);
+                    prevDetails.classList.remove('expanded');
+                    prevBtnText.textContent = 'Ver Mais';
+                }
+                
+                // Expande o atual
+                details.classList.add('expanded');
+                btnText.textContent = 'Ver Menos';
+                expandedIndex = index;
+            }
         }
         
-        function downloadImage(type) {
-            if (!currentProduct) return;
+        function toggleCompleted(index, event) {
+            event.stopPropagation();
+            const card = document.getElementById(`card-${index}`);
+            const checkbox = document.getElementById(`checkbox-${index}`);
+            const isCompleted = checkbox.checked;
             
+            if (isCompleted) {
+                card.classList.add('completed');
+                card.dataset.completed = 'true';
+            } else {
+                card.classList.remove('completed');
+                card.dataset.completed = 'false';
+            }
+            
+            saveCompletedState();
+        }
+        
+        function saveCompletedState() {
+            const state = {};
+            allProducts.forEach((p, index) => {
+                const checkbox = document.getElementById(`checkbox-${index}`);
+                state[p.id] = checkbox ? checkbox.checked : false;
+            });
+            localStorage.setItem(`completed-${username}-${getTodayDate()}`, JSON.stringify(state));
+        }
+        
+        function loadCompletedState() {
+            const savedState = localStorage.getItem(`completed-${username}-${getTodayDate()}`);
+            if (savedState) {
+                const state = JSON.parse(savedState);
+                allProducts.forEach((p, index) => {
+                    if (state[p.id]) {
+                        const checkbox = document.getElementById(`checkbox-${index}`);
+                        const card = document.getElementById(`card-${index}`);
+                        if (checkbox && card) {
+                            checkbox.checked = true;
+                            card.classList.add('completed');
+                            card.dataset.completed = 'true';
+                        }
+                    }
+                });
+            }
+        }
+        
+        function getTodayDate() {
+            return new Date().toISOString().split('T')[0];
+        }
+        
+        function downloadImage(url, filename) {
             const link = document.createElement('a');
-            link.href = type === 'product' ? currentProduct.product_image : currentProduct.reference_image;
-            link.download = `${type}-${Date.now()}.jpg`;
+            link.href = url;
+            link.download = `${filename}-${Date.now()}.jpg`;
             link.click();
         }
         
-        function copyCopy() {
-            if (!currentProduct) return;
-            
-            const copyText = currentProduct.copy_text;
+        function copyCopy(index, copyText) {
+            // Decodificar texto escapado
+            const text = copyText.replace(/\\'/g, "'");
             
             if (navigator.clipboard) {
-                navigator.clipboard.writeText(copyText).then(() => {
-                    const btn = event.target;
+                navigator.clipboard.writeText(text).then(() => {
+                    showCopyFeedback(index);
+                });
+            } else {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showCopyFeedback(index);
+            }
+        }
+        
+        function showCopyFeedback(index) {
+            const buttons = document.querySelectorAll('.btn-copy');
+            buttons.forEach((btn, i) => {
+                if (i === index) {
                     btn.textContent = 'Copiado!';
                     btn.classList.add('copied');
                     
@@ -496,41 +590,9 @@
                         btn.textContent = 'Copiar Copy';
                         btn.classList.remove('copied');
                     }, 2000);
-                });
-            } else {
-                const textarea = document.createElement('textarea');
-                textarea.value = copyText;
-                document.body.appendChild(textarea);
-                textarea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textarea);
-                
-                const btn = event.target;
-                btn.textContent = 'Copiado!';
-                btn.classList.add('copied');
-                
-                setTimeout(() => {
-                    btn.textContent = 'Copiar Copy';
-                    btn.classList.remove('copied');
-                }, 2000);
-            }
+                }
+            });
         }
-        
-        async function markAsDownloaded(productId) {
-            try {
-                await fetch(`/api/public/employee/${username}/download/${productId}`, {
-                    method: 'POST'
-                });
-            } catch (error) {
-                console.error('Erro ao marcar como baixado:', error);
-            }
-        }
-        
-        document.getElementById('productModal').addEventListener('click', (e) => {
-            if (e.target.id === 'productModal') {
-                closeModal();
-            }
-        });
         
         loadProducts();
     </script>
