@@ -9,7 +9,7 @@ const fs = require('fs');
 
 const db = require('./src/database/database');
 const authRoutes = require('./src/routes/authRoutes');
-const { authMiddleware } = require('./src/routes/authRoutes'); // ✅ ADICIONADO
+const { authMiddleware } = require('./src/routes/authRoutes');
 const productRoutes = require('./src/routes/productRoutes');
 const teamRoutes = require('./src/routes/teamRoutes');
 const distributionRoutes = require('./src/routes/distributionRoutes');
@@ -34,9 +34,10 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(cookieParser());
 
+// ✅ IMPORTANTE: Servir arquivos estáticos ANTES das rotas API
 app.use(express.static('public'));
 
-// ✅ ADICIONADO - Rota Dashboard
+// ✅ Rota Dashboard
 app.get('/api/dashboard', authMiddleware, (req, res) => {
   try {
     const totalProducts = db.prepare('SELECT COUNT(*) as count FROM products WHERE status = ?').get('active').count;
@@ -65,6 +66,7 @@ app.get('/api/dashboard', authMiddleware, (req, res) => {
   }
 });
 
+// Rotas da API
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/team', teamRoutes);
@@ -72,19 +74,34 @@ app.use('/api/distribution', distributionRoutes);
 app.use('/api/public', publicRoutes);
 app.use('/api/categories', categoryRoutes);
 
+// ✅ CORRIGIDO - Rota raiz
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
 
-app.get('/admin', (req, res) => {
+// ✅ CRÍTICO - Esta rota deve vir ANTES da rota /:username
+// Se não, o Express vai tratar "admin.html" como um username!
+app.get('/admin.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'admin.html'));
 });
 
+app.get('/login.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'login.html'));
+});
+
+app.get('/employee.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'employee.html'));
+});
+
+// ✅ Rota dinâmica de funcionários (DEVE VIR POR ÚLTIMO)
 app.get('/:username', (req, res) => {
   try {
     const username = req.params.username.toLowerCase();
     
-    if (username === 'api' || username === 'admin') {
+    // ✅ IMPORTANTE - Bloquear palavras reservadas
+    const blockedPaths = ['api', 'admin', 'login', 'employee', 'admin.html', 'login.html', 'employee.html', 'uploads', 'public'];
+    
+    if (blockedPaths.includes(username)) {
       return res.status(404).send('Página não encontrada');
     }
     
@@ -139,4 +156,5 @@ app.use((err, req, res, next) => {
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Servidor rodando na porta ${PORT}`);
   console.log(`📱 Acesse: http://localhost:${PORT}`);
+  console.log(`👤 Admin: http://localhost:${PORT}/admin.html`);
 });
