@@ -32,9 +32,11 @@ router.post('/login', (req, res) => {
       { expiresIn: process.env.SESSION_EXPIRE || '7d' }
     );
 
+    // ✅ CORRIGIDO - Adicionado userType
     res.json({
       success: true,
       token,
+      userType: 'admin', // ✅ ADICIONADO
       user: {
         id: user.id,
         email: user.email
