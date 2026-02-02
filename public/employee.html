@@ -83,113 +83,6 @@
             letter-spacing: 1px;
         }
         
-        .progress-section {
-            background: #0a0a0a;
-            border: 1px solid #1a1a1a;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 30px;
-        }
-        
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .progress-title {
-            font-size: 14px;
-            color: #888;
-            font-weight: 600;
-        }
-        
-        .progress-percent {
-            font-size: 18px;
-            font-weight: 700;
-            color: #00F2EA;
-        }
-        
-        .progress-bar {
-            width: 100%;
-            height: 10px;
-            background: #1a1a1a;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #00F2EA 0%, #FF0050 100%);
-            transition: width 0.5s;
-            border-radius: 10px;
-        }
-        
-        .actions-bar {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
-            color: #000;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 10px;
-            font-weight: 700;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(0,242,234,0.4);
-        }
-        
-        .btn-secondary {
-            background: #1a1a1a;
-            color: #FFF;
-            border: 1px solid #2a2a2a;
-            padding: 12px 25px;
-            border-radius: 10px;
-            font-weight: 700;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-        
-        .btn-secondary:hover {
-            border-color: #00F2EA;
-        }
-        
-        .filters {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-        
-        .filter-btn {
-            background: #1a1a1a;
-            color: #888;
-            border: 1px solid #2a2a2a;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        
-        .filter-btn.active {
-            background: #00F2EA;
-            color: #000;
-            border-color: #00F2EA;
-        }
-        
         .section-title {
             font-size: 20px;
             font-weight: 700;
@@ -216,15 +109,6 @@
             transform: translateY(-5px);
             border-color: #00F2EA;
             box-shadow: 0 15px 40px rgba(0,242,234,0.2);
-        }
-        
-        .product-card.downloaded {
-            border-color: #2a2a2a;
-            opacity: 0.8;
-        }
-        
-        .product-card.completed {
-            border-color: #00F2EA;
         }
         
         .product-image-wrapper {
@@ -258,43 +142,11 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
         
-        .product-status {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: rgba(0,0,0,0.8);
-            color: #00F2EA;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 700;
-            backdrop-filter: blur(10px);
-            display: none;
-        }
-        
-        .product-card.completed .product-status {
-            display: block;
-        }
-        
         .product-info {
             padding: 20px;
         }
         
-        .product-obs {
-            font-size: 13px;
-            color: #888;
-            margin-bottom: 15px;
-            min-height: 40px;
-            line-height: 1.5;
-        }
-        
-        .product-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        
-        .download-btn {
+        .btn-ver-mais {
             width: 100%;
             background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
             color: #000;
@@ -306,51 +158,158 @@
             font-size: 13px;
             transition: all 0.3s;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
         
-        .download-btn:hover {
+        .btn-ver-mais:hover {
             transform: scale(1.02);
         }
         
-        .download-btn.downloaded {
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .modal.show {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: #0a0a0a;
+            border: 1px solid #1a1a1a;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 28px;
+            cursor: pointer;
+            padding: 0;
+            width: 35px;
+            height: 35px;
+        }
+        
+        .modal-close:hover {
+            color: #FF0050;
+        }
+        
+        .modal-section {
+            margin-bottom: 25px;
+        }
+        
+        .modal-section-title {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .modal-image {
+            width: 100%;
+            border-radius: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .btn-download {
+            width: 100%;
             background: #1a1a1a;
             color: #00F2EA;
             border: 1px solid #2a2a2a;
-        }
-        
-        .complete-checkbox {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px;
-            background: #000;
-            border-radius: 8px;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 700;
             cursor: pointer;
+            font-size: 13px;
             transition: all 0.3s;
         }
         
-        .complete-checkbox:hover {
+        .btn-download:hover {
+            border-color: #00F2EA;
+            transform: scale(1.02);
+        }
+        
+        .btn-link {
+            width: 100%;
+            background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
+            color: #000;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+        
+        .btn-link:hover {
+            transform: scale(1.02);
+        }
+        
+        .copy-box {
+            background: #000;
+            border: 1px solid #1a1a1a;
+            border-radius: 10px;
+            padding: 15px;
+            color: #FFF;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .btn-copy {
+            width: 100%;
             background: #1a1a1a;
-        }
-        
-        .complete-checkbox input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
+            color: #FFF;
+            border: 1px solid #2a2a2a;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 700;
             cursor: pointer;
-            accent-color: #00F2EA;
+            font-size: 13px;
+            transition: all 0.3s;
         }
         
-        .complete-checkbox label {
-            font-size: 12px;
-            color: #888;
-            cursor: pointer;
-            flex: 1;
+        .btn-copy:hover {
+            border-color: #00F2EA;
         }
         
-        .complete-checkbox input:checked + label {
-            color: #00F2EA;
-            font-weight: 600;
+        .btn-copy.copied {
+            background: #00F2EA;
+            color: #000;
+            border-color: #00F2EA;
         }
         
         .no-products {
@@ -371,12 +330,8 @@
                 font-size: 22px;
             }
             
-            .actions-bar {
-                flex-direction: column;
-            }
-            
-            .btn-primary, .btn-secondary {
-                width: 100%;
+            .modal-content {
+                padding: 20px;
             }
         }
     </style>
@@ -390,36 +345,48 @@
     <div class="container">
         <div class="stats-bar" id="statsBar"></div>
         
-        <div class="progress-section">
-            <div class="progress-header">
-                <div class="progress-title">Progresso de Hoje</div>
-                <div class="progress-percent" id="progressPercent">0%</div>
-            </div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
-            </div>
-        </div>
-        
-        <div class="actions-bar">
-            <button class="btn-primary" onclick="downloadAll()">Baixar Todas as Imagens</button>
-            <button class="btn-secondary" onclick="markAllCompleted()">Marcar Todos como Produzidos</button>
-        </div>
-        
-        <div class="filters">
-            <button class="filter-btn active" onclick="filterProducts('all')">Todos</button>
-            <button class="filter-btn" onclick="filterProducts('pending')">Pendentes</button>
-            <button class="filter-btn" onclick="filterProducts('completed')">Concluídos</button>
-        </div>
-        
         <div class="section-title">Seus Produtos de Hoje (<span id="totalCount">0</span>)</div>
         
         <div class="products-grid" id="productsGrid"></div>
     </div>
 
+    <!-- MODAL VER MAIS -->
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Detalhes do Produto</div>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            
+            <div class="modal-section">
+                <div class="modal-section-title">Print do Produto</div>
+                <img id="modalProductImage" class="modal-image">
+                <button class="btn-download" onclick="downloadImage('product')">Baixar Foto do Produto</button>
+            </div>
+            
+            <div class="modal-section">
+                <div class="modal-section-title">Foto Referência</div>
+                <img id="modalReferenceImage" class="modal-image">
+                <button class="btn-download" onclick="downloadImage('reference')">Baixar Foto Referência</button>
+            </div>
+            
+            <div class="modal-section">
+                <div class="modal-section-title">Vídeo Referência</div>
+                <a id="modalVideoLink" class="btn-link" target="_blank">Abrir Vídeo Referência</a>
+            </div>
+            
+            <div class="modal-section">
+                <div class="modal-section-title">Copy do Vídeo</div>
+                <div class="copy-box" id="modalCopyText"></div>
+                <button class="btn-copy" onclick="copyCopy()">Copiar Copy</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const username = window.location.pathname.substring(1);
+        let currentProduct = null;
         let allProducts = [];
-        let currentFilter = 'all';
         
         async function loadProducts() {
             try {
@@ -431,7 +398,6 @@
                     return;
                 }
                 
-                // Nome e data
                 document.getElementById('userName').textContent = data.member.name.toUpperCase();
                 const today = new Date();
                 document.getElementById('dateInfo').textContent = today.toLocaleDateString('pt-BR', { 
@@ -441,14 +407,26 @@
                     day: 'numeric' 
                 });
                 
-                // Stats
-                updateStats(data.stats);
+                document.getElementById('statsBar').innerHTML = `
+                    <div class="stat-item">
+                        <div class="stat-number">${data.stats.total}</div>
+                        <div class="stat-label">Produtos Hoje</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">${data.stats.downloaded}</div>
+                        <div class="stat-label">Baixados</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">${data.stats.total - data.stats.completed}</div>
+                        <div class="stat-label">Pendentes</div>
+                    </div>
+                `;
                 
-                // Produtos
                 allProducts = [
-                    ...data.products.campeoes.map(p => ({...p, category: 'campeoes'})),
-                    ...data.products.roupas.map(p => ({...p, category: 'roupas'})),
-                    ...data.products.novos.map(p => ({...p, category: 'novos'}))
+                    ...data.products.validados,
+                    ...data.products.roupas,
+                    ...data.products.roupas_musica,
+                    ...data.products.novos
                 ];
                 
                 if (allProducts.length === 0) {
@@ -457,7 +435,18 @@
                 }
                 
                 document.getElementById('totalCount').textContent = allProducts.length;
-                renderProducts();
+                
+                document.getElementById('productsGrid').innerHTML = allProducts.map((p, index) => `
+                    <div class="product-card">
+                        <div class="product-image-wrapper">
+                            <div class="product-number">${index + 1}</div>
+                            <img src="${p.product_image}" class="product-image" alt="Produto ${index + 1}">
+                        </div>
+                        <div class="product-info">
+                            <button class="btn-ver-mais" onclick="openModal(${index})">Ver Mais</button>
+                        </div>
+                    </div>
+                `).join('');
                 
             } catch (error) {
                 console.error('Erro:', error);
@@ -465,165 +454,83 @@
             }
         }
         
-        function updateStats(stats) {
-            const completed = stats.completed || 0;
-            const total = stats.total || 0;
-            const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+        function openModal(index) {
+            currentProduct = allProducts[index];
             
-            document.getElementById('statsBar').innerHTML = `
-                <div class="stat-item">
-                    <div class="stat-number">${total}</div>
-                    <div class="stat-label">Total</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">${stats.downloaded || 0}</div>
-                    <div class="stat-label">Baixados</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">${completed}</div>
-                    <div class="stat-label">Produzidos</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">${total - completed}</div>
-                    <div class="stat-label">Pendentes</div>
-                </div>
-            `;
+            document.getElementById('modalProductImage').src = currentProduct.product_image;
+            document.getElementById('modalReferenceImage').src = currentProduct.reference_image;
+            document.getElementById('modalVideoLink').href = currentProduct.video_link;
+            document.getElementById('modalCopyText').textContent = currentProduct.copy_text;
             
-            document.getElementById('progressPercent').textContent = percent + '%';
-            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('productModal').classList.add('show');
+            
+            markAsDownloaded(currentProduct.product_id);
         }
         
-        function renderProducts() {
-            let filtered = allProducts;
-            
-            if (currentFilter === 'pending') {
-                filtered = allProducts.filter(p => !p.video_completed);
-            } else if (currentFilter === 'completed') {
-                filtered = allProducts.filter(p => p.video_completed);
-            }
-            
-            document.getElementById('productsGrid').innerHTML = filtered.map((p, index) => `
-                <div class="product-card ${p.downloaded ? 'downloaded' : ''} ${p.video_completed ? 'completed' : ''}" id="product-${p.product_id}">
-                    <div class="product-image-wrapper">
-                        <div class="product-number">${allProducts.indexOf(p) + 1}</div>
-                        <div class="product-status">Concluído</div>
-                        <img src="${p.image_path}" class="product-image" alt="Produto ${index + 1}">
-                    </div>
-                    <div class="product-info">
-                        <div class="product-obs">${p.observation || 'Sem observações'}</div>
-                        <div class="product-actions">
-                            <button 
-                                class="download-btn ${p.downloaded ? 'downloaded' : ''}" 
-                                onclick="downloadImage('${p.image_path}', ${p.product_id}, ${index + 1})"
-                                id="btn-${p.product_id}">
-                                ${p.downloaded ? 'Baixar Novamente' : 'Baixar Imagem'}
-                            </button>
-                            <div class="complete-checkbox">
-                                <input 
-                                    type="checkbox" 
-                                    id="check-${p.product_id}" 
-                                    ${p.video_completed ? 'checked' : ''}
-                                    onchange="toggleComplete(${p.product_id})">
-                                <label for="check-${p.product_id}">Vídeo Produzido</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
+        function closeModal() {
+            document.getElementById('productModal').classList.remove('show');
+            currentProduct = null;
         }
         
-        async function downloadImage(imagePath, productId, number) {
-            try {
-                // Baixar imagem
-                const link = document.createElement('a');
-                link.href = imagePath;
-                link.download = `produto-${number}.jpg`;
-                link.click();
+        function downloadImage(type) {
+            if (!currentProduct) return;
+            
+            const link = document.createElement('a');
+            link.href = type === 'product' ? currentProduct.product_image : currentProduct.reference_image;
+            link.download = `${type}-${Date.now()}.jpg`;
+            link.click();
+        }
+        
+        function copyCopy() {
+            if (!currentProduct) return;
+            
+            const copyText = currentProduct.copy_text;
+            
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(copyText).then(() => {
+                    const btn = event.target;
+                    btn.textContent = 'Copiado!';
+                    btn.classList.add('copied');
+                    
+                    setTimeout(() => {
+                        btn.textContent = 'Copiar Copy';
+                        btn.classList.remove('copied');
+                    }, 2000);
+                });
+            } else {
+                const textarea = document.createElement('textarea');
+                textarea.value = copyText;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
                 
-                // Marcar como baixado
+                const btn = event.target;
+                btn.textContent = 'Copiado!';
+                btn.classList.add('copied');
+                
+                setTimeout(() => {
+                    btn.textContent = 'Copiar Copy';
+                    btn.classList.remove('copied');
+                }, 2000);
+            }
+        }
+        
+        async function markAsDownloaded(productId) {
+            try {
                 await fetch(`/api/public/employee/${username}/download/${productId}`, {
                     method: 'POST'
                 });
-                
-                // Atualizar UI
-                const btn = document.getElementById(`btn-${productId}`);
-                btn.textContent = 'Baixar Novamente';
-                btn.classList.add('downloaded');
-                
-                const card = document.getElementById(`product-${productId}`);
-                card.classList.add('downloaded');
-                
-                // Atualizar stats
-                loadProducts();
-                
             } catch (error) {
-                console.error('Erro ao baixar:', error);
+                console.error('Erro ao marcar como baixado:', error);
             }
         }
         
-        async function toggleComplete(productId) {
-            try {
-                const checkbox = document.getElementById(`check-${productId}`);
-                const isCompleted = checkbox.checked;
-                
-                if (isCompleted) {
-                    await fetch(`/api/public/employee/${username}/complete/${productId}`, {
-                        method: 'POST'
-                    });
-                    
-                    const card = document.getElementById(`product-${productId}`);
-                    card.classList.add('completed');
-                } else {
-                    // Remover completed
-                    const card = document.getElementById(`product-${productId}`);
-                    card.classList.remove('completed');
-                }
-                
-                // Atualizar stats
-                loadProducts();
-                
-            } catch (error) {
-                console.error('Erro:', error);
+        document.getElementById('productModal').addEventListener('click', (e) => {
+            if (e.target.id === 'productModal') {
+                closeModal();
             }
-        }
-        
-        async function downloadAll() {
-            if (!confirm('Baixar todas as ' + allProducts.length + ' imagens?')) return;
-            
-            for (let i = 0; i < allProducts.length; i++) {
-                const p = allProducts[i];
-                await downloadImage(p.image_path, p.product_id, i + 1);
-                await new Promise(resolve => setTimeout(resolve, 500)); // Delay entre downloads
-            }
-            
-            alert('Todas as imagens foram baixadas!');
-        }
-        
-        async function markAllCompleted() {
-            if (!confirm('Marcar todos os ' + allProducts.length + ' produtos como produzidos?')) return;
-            
-            for (const p of allProducts) {
-                const checkbox = document.getElementById(`check-${p.product_id}`);
-                if (!checkbox.checked) {
-                    checkbox.checked = true;
-                    await toggleComplete(p.product_id);
-                }
-            }
-            
-            alert('Todos marcados como produzidos!');
-        }
-        
-        function filterProducts(filter) {
-            currentFilter = filter;
-            
-            // Atualizar botões
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
-            renderProducts();
-        }
+        });
         
         loadProducts();
     </script>
